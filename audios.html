@@ -128,3 +128,20 @@
             storageBucket: "TU_STORAGE_BUCKET",
             messagingSenderId: "TU_MESSAGING_SENDER_ID",
             appId: "TU_APP_ID"
+        };
+
+        // Inicializar Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+
+        let mediaRecorder; 
+        let audioChunks = [];
+        let audioBlob;
+        let progressInterval;
+        let stream; // Para poder detener el stream después
+
+        async function startRecording() {
+            try {
+                // Solicitamos el acceso al micrófono
+                stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+           
