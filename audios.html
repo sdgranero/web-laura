@@ -3,66 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grabador de Audio con Supabase</title>
+    <title>Grabador de Audio</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-        .container {
-            text-align: center;
-        }
-        .buttons {
-            margin-bottom: 20px;
-        }
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background-color: #ddd;
-            margin-bottom: 20px;
-            display: none;
-        }
-        .progress {
-            height: 100%;
-            background-color: #4caf50;
-        }
-        .audio-list {
-            margin-top: 20px;
-            width: 100%;
-        }
-        .audio-item {
-            margin-bottom: 10px;
-        }
-        button {
-            font-size: 20px;
-            padding: 10px 20px;
-            margin: 5px;
-            cursor: pointer;
-            background-color: #4caf50;
-            border: none;
-            color: white;
-            border-radius: 5px;
-        }
-        button:disabled {
-            background-color: #aaa;
-        }
+        /* Tu estilo aquí */
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>Grabador de Audio con Supabase</h1>
+        <h1>Grabador de Audio</h1>
         <div class="buttons">
-            <button id="start-btn" onclick="startRecording()">🎤 Grabar</button>
-            <button id="stop-btn" onclick="stopRecording()" disabled>❌ Parar</button>
+            <button class="start-btn" onclick="startRecording()">🎤</button>
+            <button class="stop-btn" onclick="stopRecording()" disabled>❌</button>
         </div>
-
         <div class="progress-bar" id="progressBar">
             <div class="progress" id="progress"></div>
         </div>
@@ -76,22 +29,27 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.3/dist/supabase.js"></script>
 
     <script>
-        // Configuración de Supabase
-        const supabaseUrl = 'https://evajsorhnvuhmqznsxyb.supabase.co';  // Reemplaza con tu URL de Supabase
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2YWpzb3JobnZ1aG1xem5zeHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxOTk3MzUsImV4cCI6MjA1MTc3NTczNX0.6rpRY5LnVI1drZvm2avoQmMoP8mVRFXSQSFSkEe4xt0';  // Reemplaza con tu clave de API
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        document.addEventListener("DOMContentLoaded", function() {
+            // Configuración de Supabase
+            const supabaseUrl = 'https://evajsorhnvuhmqznsxyb.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2YWpzb3JobnZ1aG1xem5zeHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxOTk3MzUsImV4cCI6MjA1MTc3NTczNX0.6rpRY5LnVI1drZvm2avoQmMoP8mVRFXSQSFSkEe4xt0'; // Reemplaza con tu clave API
+            const supabase = supabase.createClient(supabaseUrl, supabaseKey);  // Inicialización de supabase
 
-        let mediaRecorder;
-        let audioChunks = [];
-        let audioBlob;
-        let progressInterval;
-        let stream;
+            let mediaRecorder;
+            let audioChunks = [];
+            let audioBlob;
+            let progressInterval;
+            let stream;
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Función para iniciar la grabación
+            // Verifica que supabase está disponible
+            if (!supabase) {
+                console.error("Error: Supabase no se ha cargado correctamente.");
+                return;
+            }
+
             async function startRecording() {
                 try {
-                    // Solicitamos acceso al micrófono
+                    // Solicitamos el acceso al micrófono
                     stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
                     // Inicializamos el MediaRecorder
@@ -104,8 +62,8 @@
                     };
 
                     mediaRecorder.onstart = () => {
-                        document.getElementById('start-btn').disabled = true;
-                        document.getElementById('stop-btn').disabled = false;
+                        document.querySelector('.start-btn').disabled = true;
+                        document.querySelector('.stop-btn').disabled = false;
                         document.getElementById('progressBar').style.display = 'block';
                         let progress = 0;
                         progressInterval = setInterval(() => {
@@ -132,7 +90,7 @@
                         const fileName = `audio_${Date.now()}.webm`;
                         const { data, error } = await supabase
                             .storage
-                            .from('audios')  // Asegúrate de que el bucket se llama 'audios'
+                            .from('audios') // Asegúrate de tener un bucket llamado 'audios'
                             .upload(fileName, audioBlob, {
                                 cacheControl: '3600',
                                 upsert: false
@@ -149,38 +107,13 @@
                 }
             }
 
-            // Función para detener la grabación
             function stopRecording() {
+                // Detener la grabación
                 mediaRecorder.stop();
-                stream.getTracks().forEach(track => track.stop());  // Detener el micrófono
-                document.getElementById('start-btn').disabled = false;
-                document.getElementById('stop-btn').disabled = true;
+                stream.getTracks().forEach(track => track.stop()); // Detener el micrófono
+                document.querySelector('.start-btn').disabled = false;
+                document.querySelector('.stop-btn').disabled = true;
             }
-
-            // Función para cargar los audios grabados desde Supabase
-            async function loadAudioList() {
-                const { data, error } = await supabase
-                    .storage
-                    .from('audios')
-                    .list('', { limit: 10 });
-
-                if (error) {
-                    console.error('Error al obtener audios:', error.message);
-                } else {
-                    data.forEach(audioFile => {
-                        const audioElement = document.createElement('audio');
-                        audioElement.src = `${supabaseUrl}/storage/v1/object/public/audios/${audioFile.name}`;
-                        audioElement.controls = true;
-                        const audioItem = document.createElement('div');
-                        audioItem.classList.add('audio-item');
-                        audioItem.appendChild(audioElement);
-                        document.getElementById('audioList').appendChild(audioItem);
-                    });
-                }
-            }
-
-            // Cargar los audios al cargar la página
-            loadAudioList();
         });
     </script>
 
