@@ -112,33 +112,37 @@
                     };
 
                     mediaRecorder.onstop = async () => {
-                        clearInterval(progressInterval);
-                        audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                        const audioURL = URL.createObjectURL(audioBlob);
-                        const audioElement = document.createElement('audio');
-                        audioElement.src = audioURL;
-                        audioElement.controls = true;
-                        const audioItem = document.createElement('div');
-                        audioItem.classList.add('audio-item');
-                        audioItem.appendChild(audioElement);
-                        document.getElementById('audioList').appendChild(audioItem);
-
-                        // Subir el archivo a Supabase Storage
-                        const fileName = `audio_${Date.now()}.webm`;
-                        const { data, error } = await supabase
-                            .storage
-                            .from('audios')
-                            .upload(fileName, audioBlob, {
-                                cacheControl: '3600',
-                                upsert: false
-                            });
-
-                        if (error) {
-                            alert('Error al subir el audio: ' + error.message);
-                        } else {
-                            alert('Audio subido correctamente.');
-                        }
-                    };
+                    clearInterval(progressInterval);
+                    audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    
+                    // Verifica el tipo MIME del Blob
+                    console.log(audioBlob.type);  // Esto debería imprimir 'audio/webm' si todo está correcto
+                
+                    const audioURL = URL.createObjectURL(audioBlob);
+                    const audioElement = document.createElement('audio');
+                    audioElement.src = audioURL;
+                    audioElement.controls = true;
+                    const audioItem = document.createElement('div');
+                    audioItem.classList.add('audio-item');
+                    audioItem.appendChild(audioElement);
+                    document.getElementById('audioList').appendChild(audioItem);
+                
+                    // Subir el archivo a Supabase
+                    const fileName = `audio_${Date.now()}.webm`;
+                    const { data, error } = await supabase
+                        .storage
+                        .from('audios') // Asegúrate de que el bucket esté configurado correctamente
+                        .upload(fileName, audioBlob, {
+                            cacheControl: '3600',
+                            upsert: false
+                        });
+                
+                    if (error) {
+                        console.error('Error al subir el archivo:', error.message);
+                    } else {
+                        console.log('Archivo subido correctamente:', data);
+                    }
+                };
                 } catch (error) {
                     alert('No se pudo acceder al micrófono: ' + error.message);
                 }
