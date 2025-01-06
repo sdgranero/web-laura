@@ -4,14 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generar Evento en Calendario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #555;
+            font-size: 1.2em;
+        }
+        #downloadMessage {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+            display: none;
+        }
+        .download-btn {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1.2em;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+        }
+        .download-btn:hover {
+            background-color: #45a049;
+        }
+        .download-btn i {
+            margin-right: 10px;
+        }
+        .arrow {
+            margin-top: 30px;
+            font-size: 2em;
+            animation: bounce 1s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Generando evento...</h1>
-    <p>El evento se añadirá a tu calendario.</p>
+    <h1>Generando evento en tu calendario...</h1>
+    <p>El archivo de evento se descargará automáticamente. Luego, abre el archivo para añadirlo a tu calendario.</p>
+    
+    <!-- Icono de calendario y botón -->
+    <button class="download-btn" id="downloadBtn">
+        <i class="fas fa-calendar-alt"></i> Descargar evento
+    </button>
 
+    <!-- Flecha de instrucción -->
+    <div id="arrow" class="arrow">↓</div>
+
+    <div id="downloadMessage">
+        <p>El archivo se ha descargado.</p>
+        <p>Haz clic en el archivo para añadir el evento a tu calendario.</p>
+    </div>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script>
-        // Genera el archivo .ics con fecha de un mes a partir de hoy
         (function generateEvent() {
+            // Genera el archivo .ics con fecha de un mes a partir de hoy
             const today = new Date();
             const nextMonth = new Date(today.setMonth(today.getMonth() + 1));
             const startDate = nextMonth.toISOString().replace(/[-:]/g, '').split('.')[0];
@@ -38,6 +112,12 @@ END:VCALENDAR
             link.href = url;
             link.download = 'evento_en_un_mes.ics';
             link.click();
+
+            // Mostrar mensaje de descarga y flecha
+            setTimeout(() => {
+                document.getElementById('downloadMessage').style.display = 'block';
+                document.getElementById('arrow').style.display = 'none';
+            }, 1000); // Mostrar mensaje de descarga después de 1 segundo
         })();
     </script>
 </body>
