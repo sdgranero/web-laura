@@ -6,13 +6,12 @@
     <title>Generar Evento en Calendario</title>
 </head>
 <body>
-    <h1>Generar Evento en Calendario</h1>
-    <p>Haz clic en el botón para agregar un evento en el calendario, programado un mes desde hoy.</p>
-    <button onclick="generateEvent()">Generar Evento</button>
+    <h1>Generando evento...</h1>
+    <p>El evento se añadirá a tu calendario.</p>
 
     <script>
         // Genera el archivo .ics con fecha de un mes a partir de hoy
-        function generateEvent() {
+        (function generateEvent() {
             const today = new Date();
             const nextMonth = new Date(today.setMonth(today.getMonth() + 1));
             const startDate = nextMonth.toISOString().replace(/[-:]/g, '').split('.')[0];
@@ -33,11 +32,13 @@ END:VCALENDAR
 
             const blob = new Blob([icsContent], { type: 'text/calendar' });
             const url = URL.createObjectURL(blob);
+
+            // Redirigir automáticamente al enlace de descarga
             const link = document.createElement('a');
             link.href = url;
             link.download = 'evento_en_un_mes.ics';
             link.click();
-        }
+        })();
     </script>
 </body>
 </html>
