@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generar Evento en Calendario</title>
+</head>
+<body>
+    <h1>Generar Evento en Calendario</h1>
+    <p>Haz clic en el botón para agregar un evento en el calendario, programado un mes desde hoy.</p>
+    <button onclick="generateEvent()">Generar Evento</button>
+
+    <script>
+        // Genera el archivo .ics con fecha de un mes a partir de hoy
+        function generateEvent() {
+            const today = new Date();
+            const nextMonth = new Date(today.setMonth(today.getMonth() + 1));
+            const startDate = nextMonth.toISOString().replace(/[-:]/g, '').split('.')[0];
+            const endDate = new Date(nextMonth.setHours(nextMonth.getHours() + 2)).toISOString().replace(/[-:]/g, '').split('.')[0];
+
+            const icsContent = `
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+SUMMARY:Evento en un mes
+DTSTART:${startDate}
+DTEND:${endDate}
+DESCRIPTION:Descripción del evento
+LOCATION:Ubicación del evento
+END:VEVENT
+END:VCALENDAR
+`;
+
+            const blob = new Blob([icsContent], { type: 'text/calendar' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'evento_en_un_mes.ics';
+            link.click();
+        }
+    </script>
+</body>
+</html>
