@@ -5,13 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generar Evento en Calendario</title>
     <style>
+        /* Estilos generales */
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 0;
             padding: 0;
             background-image: url('seblau.jpg'); /* Ruta de la imagen */
-            background-color: #f0f0f0;
+            background-size: cover; /* Hace que la imagen cubra todo el fondo */
+            background-position: center center; /* Centra la imagen */
+            background-attachment: fixed; /* Hace que el fondo no se mueva al hacer scroll */
+            background-repeat: no-repeat; /* Evita que la imagen se repita en mosaico */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -19,16 +23,29 @@
             flex-direction: column;
         }
         h1 {
-            color: #333;
+            color: #fff; /* Color del texto en blanco */
+            font-size: 2em;
+            margin: 0;
         }
         .gear {
             margin-top: 30px;
             font-size: 3em;
+            color: #fff; /* Color del engranaje en blanco */
             animation: spin 2s linear infinite;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        /* Estilos para dispositivos móviles */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5em; /* Reduce el tamaño del texto en pantallas más pequeñas */
+            }
+            .gear {
+                font-size: 2.5em; /* Reduce el tamaño del engranaje en pantallas más pequeñas */
+            }
         }
     </style>
 </head>
@@ -38,9 +55,7 @@
     <!-- Engranaje animado -->
     <div id="gear" class="gear">⚙️</div>
 
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script>
-        // Esta función genera el evento y lo descarga automáticamente
         function generateEvent() {
             const today = new Date();
             const nextMonth = new Date(today.setMonth(today.getMonth() + 1));
@@ -63,19 +78,16 @@ END:VCALENDAR
             const blob = new Blob([icsContent], { type: 'text/calendar' });
             const url = URL.createObjectURL(blob);
 
-            // Redirigir automáticamente al enlace de descarga
             const link = document.createElement('a');
             link.href = url;
             link.download = 'evento_en_un_mes.ics';
             link.click();
 
-            // Cerrar la ventana emergente después de 2 segundos
             setTimeout(() => {
                 window.close();
             }, 2000);
         }
 
-        // Ejecutar la generación de evento al cargar la página
         window.onload = function() {
             generateEvent();
         }
