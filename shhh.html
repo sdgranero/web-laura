@@ -12,20 +12,21 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background: #cccccc; /* Fondo gris */
-            background-image: url('princess.jpg');
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
+            background-image: url('princess.jpg'), linear-gradient(to bottom, #f0e1d2, #cccccc); /* Imagen de fondo + degradado */
+            background-size: contain; /* Asegura que la imagen se vea completa */
+            background-position: center center;
+            background-repeat: no-repeat; /* No repetir la imagen */
+            background-color: #f0e1d2; /* Color de fondo de apoyo */
+            background-blend-mode: overlay; /* Degradado sobre la imagen */
         }
 
         .container {
             text-align: center;
             padding: 20px;
             border: 2px solid #ccc;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semi-transparente para la caja */
             border-radius: 10px;
-            width: 250px;
+            width: 250px; /* Tamaño reducido de la caja */
             margin: auto;
         }
 
@@ -35,7 +36,7 @@
         }
 
         input[type="password"] {
-            width: 10ch;
+            width: 10ch; /* Ajustado para que se adapte a 10 caracteres */
             padding: 10px;
             margin: 10px 0;
             border: 1px solid #ccc;
@@ -44,45 +45,18 @@
         }
 
         button {
-            padding: 5px 10px;
+            padding: 5px 10px; /* Ajustado el tamaño del padding */
             border: none;
             background-color: #4CAF50;
             color: white;
             font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
-            display: inline-block;
+            display: inline-block; /* Asegura que el tamaño del botón se ajuste al texto */
         }
-        
+
         button:hover {
             background-color: #45a049;
-        }
-
-        .content {
-            display: none;
-            text-align: center;
-        }
-
-        .content.show {
-            display: block;
-        }
-
-        /* Estilos para la cuadrícula de imágenes */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(2, 1fr);
-            gap: 20px;
-            padding: 20px;
-            max-width: 90%;
-            margin: 0 auto;
-        }
-
-        .grid img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
         }
 
         /* Estilos para dispositivos móviles */
@@ -98,19 +72,6 @@
             button {
                 width: 100%;
             }
-
-            .grid {
-                grid-template-columns: repeat(2, 1fr);
-                grid-template-rows: repeat(3, 1fr);
-            }
-        }
-
-        /* Estilos específicos para iPhone 13 */
-        @media (max-width: 390px) {
-            .grid {
-                grid-template-columns: 1fr;
-                grid-template-rows: repeat(6, 1fr);
-            }
         }
     </style>
 </head>
@@ -121,30 +82,15 @@
         <input type="password" id="password" placeholder="">
         <h3>Treatment</h3>
         <button onclick="checkPassword()">Entrar</button>
-
-        <div id="content" class="content">
-            <!-- Cuadrícula de imágenes -->
-            <div class="grid">
-                <img src="guardia_civil.jpg" alt="Imagen 1">
-                <img src="booty_call.jpg" alt="Imagen 2">
-                <img src="borracha_ella.jpg" alt="Imagen 3">
-                <img src="image4.jpg" alt="Imagen 4">
-                <img src="image5.jpg" alt="Imagen 5">
-                <img src="image6.jpg" alt="Imagen 6">
-            </div>
-        </div>
     </div>
 
     <script>
         function checkPassword() {
             const passwordInput = document.getElementById('password').value;
             const correctPassword = 'princess'; // Contraseña correcta
-            const content = document.getElementById('content');
 
             if (passwordInput === correctPassword) {
-                content.classList.add('show'); // Muestra el contenido si la contraseña es correcta
-                document.querySelector('.container').style.display = "none"; // Oculta el formulario de inicio de sesión
-                content.style.display = "block"; // Muestra la cuadrícula de imágenes
+                window.location.href = 'canvas.html'; // Redirige a canvas.html si la contraseña es correcta
             } else {
                 alert('Contraseña incorrecta. Inténtalo de nuevo.');
             }
