@@ -144,4 +144,61 @@
             try {
                 // Solicitamos el acceso al micrófono
                 stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-           
+                
+                // Inicializamos el MediaRecorder una vez que se tiene el acceso al micrófono
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.start();
+
+                audioChunks = [];
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstart = () => {
+                    document.querySelector('.start-btn').disabled = true;
+                    document.querySelector('.stop-btn').disabled = false;
+                    document.getElementById('progressBar').style.display = 'block';
+                    let progress = 0;
+                    progressInterval = setInterval(() => {
+                        if (progress < 100) {
+                            progress++;
+                            document.getElementById('progress').style.width = progress + '%';
+                        }
+                    }, 100);
+                };
+
+                mediaRecorder.onstop = async () => {
+                    clearInterval(progressInterval);
+                    audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const audioURL = URL.createObjectURL(audioBlob);
+                    const audioElement = document.createElement('audio');
+                    audioElement.src = audioURL;
+                    audioElement.controls = true;
+                    const audioItem = document.createElement('div');
+                    audioItem.classList.add('audio-item');
+                    audioItem.appendChild(audioElement);
+                    document.getElementById('audioList').appendChild(audioItem);
+
+                    // Subir el archivo a Firebase
+                    const fileName = `audio_${Date.now()}.webm`;
+                    const storageRef = firebase.storage().ref().child(fileName);
+                    await storageRef.put(audioBlob);
+
+                    alert('Audio subido correctamente.');
+                };
+            } catch (error) {
+                alert('No se pudo acceder al micrófono: ' + error.message);
+            }
+        }
+
+        function stopRecording() {
+            // Detener la grabación
+            mediaRecorder.stop();
+            stream.getTracks().forEach(track => track.stop()); // Detener el micrófono
+            document.querySelector('.start-btn').disabled = false;
+            document.querySelector('.stop-btn').disabled = true;
+        }
+    </script>
+
+</body>
+</html>
