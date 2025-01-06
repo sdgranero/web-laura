@@ -35,23 +35,25 @@
         }
 
         input[type="password"] {
-            width: 100%;
+            width: 10ch; /* Ajustado para que se adapte a 10 caracteres */
             padding: 10px;
             margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
+            font-size: 16px; /* Ajuste del tamaño de la fuente para mayor legibilidad */
         }
 
         button {
-            padding: 10px 20px;
+            padding: 5px 10px; /* Ajustado el tamaño del padding */
             border: none;
             background-color: #4CAF50;
             color: white;
             font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
+            display: inline-block; /* Asegura que el tamaño del botón se ajuste al texto */
         }
-
+        
         button:hover {
             background-color: #45a049;
         }
@@ -86,12 +88,11 @@
 
     <div class="container">
         <h2>Only</h2>
-        
         <input type="password" id="password" placeholder="Introduce la contraseña">
+        <h3>Treatment</h3>
         <button onclick="checkPassword()">Entrar</button>
 
-        <h3>Treatment</h3>
-
+        
         <div id="content" class="content">
             <h1>Bienvenido, acceso concedido</h1>
             <p>Este es el contenido de la página privada.</p>
