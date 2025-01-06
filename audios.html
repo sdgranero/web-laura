@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grabador de Audio</title>
     <style>
+        /* Aquí va tu CSS */
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
@@ -116,17 +117,14 @@
     </div>
 
     <!-- Incluir la librería de Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.28.6/dist/umd/supabase.js"></script>
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.28.6/dist/umd/supabase.js'
 
-    <!-- El script que ejecutará la inicialización al cargar completamente el DOM -->
-    <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Configuración de Supabase
-            import { createClient } from '@supabase/supabase-js'
-            
-            const supabaseUrl = 'https://evajsorhnvuhmqznsxyb.supabase.co'
-            const supabaseKey = process.env.SUPABASE_KEY
-            const supabase = createClient(supabaseUrl, supabaseKey)
+            const supabaseUrl = 'https://evajsorhnvuhmqznsxyb.supabase.co';
+            const supabaseKey = 'your-supabase-api-key'; // Reemplaza con tu Supabase Key
+            const supabase = createClient(supabaseUrl, supabaseKey);
 
             let mediaRecorder;
             let audioChunks = [];
