@@ -39,14 +39,13 @@
 
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script>
-        (function generateEvent() {
-            // Genera el archivo .ics con fecha de un mes a partir de hoy
+        // Esta función genera el evento y lo descarga automáticamente
+        function generateEvent() {
             const today = new Date();
             const nextMonth = new Date(today.setMonth(today.getMonth() + 1));
             const startDate = nextMonth.toISOString().replace(/[-:]/g, '').split('.')[0];
             const endDate = new Date(nextMonth.setHours(nextMonth.getHours() + 2)).toISOString().replace(/[-:]/g, '').split('.')[0];
 
-            // Actualizar el título del evento a "PASAR DIARIO"
             const icsContent = `
 BEGIN:VCALENDAR
 VERSION:2.0
@@ -69,11 +68,16 @@ END:VCALENDAR
             link.download = 'evento_en_un_mes.ics';
             link.click();
 
-            // Cerrar la pestaña después de 2 segundos (permitir tiempo para que la descarga comience)
+            // Cerrar la ventana emergente después de 2 segundos
             setTimeout(() => {
                 window.close();
             }, 2000);
-        })();
+        }
+
+        // Ejecutar la generación de evento al cargar la página
+        window.onload = function() {
+            generateEvent();
+        }
     </script>
 </body>
 </html>
