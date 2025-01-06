@@ -27,7 +27,8 @@
 
     <!-- Cargar la librería de Supabase con tipo "module" -->
     <script type="module">
-        import { createClient } from 'jsr:@supabase/supabase-js@2'
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/supabase.js';
+
         document.addEventListener("DOMContentLoaded", function() {
             // Asegúrate de que supabase se ha cargado correctamente
             if (typeof createClient === 'undefined') {
