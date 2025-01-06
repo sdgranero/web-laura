@@ -115,9 +115,9 @@
         </div>
     </div>
 
-    <!-- Firebase SDK (Carga sin módulos, versión global) -->
-    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-storage.js"></script>
+    <!-- Firebase SDK (sin módulos) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
     <script>
         // Configuración de Firebase
@@ -132,15 +132,14 @@
         };
 
         // Inicializar Firebase
-        const app = firebase.initializeApp(firebaseConfig);
+        firebase.initializeApp(firebaseConfig);
         const storage = firebase.storage();
 
-        // Definir variables al principio
         let mediaRecorder;
         let audioChunks = [];
         let audioBlob;
         let progressInterval;
-        let stream; // Este es el stream que vamos a manejar
+        let stream;
 
         async function startRecording() {
             try {
