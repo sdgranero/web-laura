@@ -72,98 +72,89 @@
     </div>
 
     <!-- Cargar la librería de Supabase -->
-   
-
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-        // Inicializar supabase después de cargar el script
-        document.addEventListener("DOMContentLoaded", function() {
-             
-            // Configuración de Supabase
-            const supabaseUrl = 'https://evajsorhnvuhmqznsxyb.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2YWpzb3JobnZ1aG1xem5zeHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxOTk3MzUsImV4cCI6MjA1MTc3NTczNX0.6rpRY5LnVI1drZvm2avoQmMoP8mVRFXSQSFSkEe4xt0'; // Reemplaza con tu clave API
-            const supabase = createClient(supabaseUrl, supabaseKey);  // Inicialización de supabase
 
-            let mediaRecorder;
-            let audioChunks = [];
-            let audioBlob;
-            let progressInterval;
-            let stream;
+        // Configuración de Supabase
+        const supabaseUrl = 'https://evajsorhnvuhmqznsxyb.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2YWpzb3JobnZ1aG1xem5zeHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxOTk3MzUsImV4cCI6MjA1MTc3NTczNX0.6rpRY5LnVI1drZvm2avoQmMoP8mVRFXSQSFSkEe4xt0'; // Reemplaza con tu clave API
+        const supabase = createClient(supabaseUrl, supabaseKey);  // Inicialización de supabase
 
-            // Verifica que supabase está disponible
-            if (!supabase) {
-                console.error("Error: Supabase no se ha cargado correctamente.");
-                return;
-            }
+        let mediaRecorder;
+        let audioChunks = [];
+        let audioBlob;
+        let progressInterval;
+        let stream;
 
-            async function startRecording() {
-                try {
-                    // Solicitamos el acceso al micrófono
-                    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        // Función para empezar a grabar
+        async function startRecording() {
+            try {
+                // Solicitamos el acceso al micrófono
+                stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-                    // Inicializamos el MediaRecorder
-                    mediaRecorder = new MediaRecorder(stream);
-                    mediaRecorder.start();
+                // Inicializamos el MediaRecorder
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.start();
 
-                    audioChunks = [];
-                    mediaRecorder.ondataavailable = event => {
-                        audioChunks.push(event.data);
-                    };
+                audioChunks = [];
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
 
-                    mediaRecorder.onstart = () => {
-                        document.querySelector('.start-btn').disabled = true;
-                        document.querySelector('.stop-btn').disabled = false;
-                        document.getElementById('progressBar').style.display = 'block';
-                        let progress = 0;
-                        progressInterval = setInterval(() => {
-                            if (progress < 100) {
-                                progress++;
-                                document.getElementById('progress').style.width = progress + '%';
-                            }
-                        }, 100);
-                    };
-
-                    mediaRecorder.onstop = async () => {
-                        clearInterval(progressInterval);
-                        audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                        const audioURL = URL.createObjectURL(audioBlob);
-                        const audioElement = document.createElement('audio');
-                        audioElement.src = audioURL;
-                        audioElement.controls = true;
-                        const audioItem = document.createElement('div');
-                        audioItem.classList.add('audio-item');
-                        audioItem.appendChild(audioElement);
-                        document.getElementById('audioList').appendChild(audioItem);
-
-                        // Subir el archivo a Supabase Storage
-                        const fileName = `audio_${Date.now()}.webm`;
-                        const { data, error } = await supabase
-                            .storage
-                            .from('audios') // Asegúrate de tener un bucket llamado 'audios'
-                            .upload(fileName, audioBlob, {
-                                cacheControl: '3600',
-                                upsert: false
-                            });
-
-                        if (error) {
-                            alert('Error al subir el audio: ' + error.message);
-                        } else {
-                            alert('Audio subido correctamente.');
+                mediaRecorder.onstart = () => {
+                    document.querySelector('.start-btn').disabled = true;
+                    document.querySelector('.stop-btn').disabled = false;
+                    document.getElementById('progressBar').style.display = 'block';
+                    let progress = 0;
+                    progressInterval = setInterval(() => {
+                        if (progress < 100) {
+                            progress++;
+                            document.getElementById('progress').style.width = progress + '%';
                         }
-                    };
-                } catch (error) {
-                    alert('No se pudo acceder al micrófono: ' + error.message);
-                }
-            }
+                    }, 100);
+                };
 
-            function stopRecording() {
-                // Detener la grabación
-                mediaRecorder.stop();
-                stream.getTracks().forEach(track => track.stop()); // Detener el micrófono
-                document.querySelector('.start-btn').disabled = false;
-                document.querySelector('.stop-btn').disabled = true;
+                mediaRecorder.onstop = async () => {
+                    clearInterval(progressInterval);
+                    audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const audioURL = URL.createObjectURL(audioBlob);
+                    const audioElement = document.createElement('audio');
+                    audioElement.src = audioURL;
+                    audioElement.controls = true;
+                    const audioItem = document.createElement('div');
+                    audioItem.classList.add('audio-item');
+                    audioItem.appendChild(audioElement);
+                    document.getElementById('audioList').appendChild(audioItem);
+
+                    // Subir el archivo a Supabase Storage
+                    const fileName = `audio_${Date.now()}.webm`;
+                    const { data, error } = await supabase
+                        .storage
+                        .from('audios') // Asegúrate de tener un bucket llamado 'audios'
+                        .upload(fileName, audioBlob, {
+                            cacheControl: '3600',
+                            upsert: false
+                        });
+
+                    if (error) {
+                        alert('Error al subir el audio: ' + error.message);
+                    } else {
+                        alert('Audio subido correctamente.');
+                    }
+                };
+            } catch (error) {
+                alert('No se pudo acceder al micrófono: ' + error.message);
             }
-        });
+        }
+
+        // Función para detener la grabación
+        function stopRecording() {
+            // Detener la grabación
+            mediaRecorder.stop();
+            stream.getTracks().forEach(track => track.stop()); // Detener el micrófono
+            document.querySelector('.start-btn').disabled = false;
+            document.querySelector('.stop-btn').disabled = true;
+        }
     </script>
 
 </body>
