@@ -20,33 +20,6 @@
         h1 {
             color: #333;
         }
-        p {
-            color: #555;
-            font-size: 1.2em;
-        }
-        #downloadMessage {
-            margin-top: 20px;
-            font-size: 1.2em;
-            color: #333;
-            display: none;
-        }
-        .download-btn {
-            background-color: #4CAF50;
-            color: white;
-            font-size: 1.2em;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-        }
-        .download-btn:hover {
-            background-color: #45a049;
-        }
-        .download-btn i {
-            margin-right: 10px;
-        }
         .arrow {
             margin-top: 30px;
             font-size: 2em;
@@ -66,21 +39,10 @@
     </style>
 </head>
 <body>
-    <h1>Generando evento en tu calendario...</h1>
-    <p>El archivo de evento se descargará automáticamente. Luego, abre el archivo para añadirlo a tu calendario.</p>
+    <h1>Creando evento...</h1>
     
-    <!-- Icono de calendario y botón -->
-    <button class="download-btn" id="downloadBtn">
-        <i class="fas fa-calendar-alt"></i> Descargar evento
-    </button>
-
     <!-- Flecha de instrucción -->
     <div id="arrow" class="arrow">↓</div>
-
-    <div id="downloadMessage">
-        <p>El archivo se ha descargado.</p>
-        <p>Haz clic en el archivo para añadir el evento a tu calendario.</p>
-    </div>
 
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script>
@@ -112,11 +74,11 @@ END:VCALENDAR
             link.href = url;
             link.download = 'evento_en_un_mes.ics';
             link.click();
-            // Mostrar mensaje de descarga y flecha
+
+            // Cerrar la pestaña después de 2 segundos (permitir tiempo para que la descarga comience)
             setTimeout(() => {
-                document.getElementById('downloadMessage').style.display = 'block';
-                document.getElementById('arrow').style.display = 'none';
-            }, 1000); // Mostrar mensaje de descarga después de 1 segundo
+                window.close();
+            }, 2000);
         })();
     </script>
 </body>
