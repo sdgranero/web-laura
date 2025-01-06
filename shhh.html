@@ -12,12 +12,11 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-image: url('princess.jpg'), linear-gradient(to bottom, #f0e1d2, #cccccc); /* Imagen de fondo + degradado */
+            background: #cccccc; /* Fondo gris */
+            background-image: url('princess.jpg');
             background-size: contain;
-            background-position: center center;
+            background-position: center;
             background-repeat: no-repeat;
-            background-color: #f0e1d2; /* Color de fondo de apoyo */
-            background-blend-mode: overlay; /* Degradado sobre la imagen */
         }
 
         .container {
@@ -144,7 +143,8 @@
 
             if (passwordInput === correctPassword) {
                 content.classList.add('show'); // Muestra el contenido si la contraseña es correcta
-                document.querySelector('.container').innerHTML = "<h1>Bienvenido</h1><p>Acceso concedido al contenido</p>"; // Reemplaza la caja de contraseña con el mensaje de acceso
+                document.querySelector('.container').style.display = "none"; // Oculta el formulario de inicio de sesión
+                content.style.display = "block"; // Muestra la cuadrícula de imágenes
             } else {
                 alert('Contraseña incorrecta. Inténtalo de nuevo.');
             }
