@@ -20,29 +20,22 @@
         h1 {
             color: #333;
         }
-        .arrow {
+        .gear {
             margin-top: 30px;
-            font-size: 2em;
-            animation: bounce 1s infinite;
+            font-size: 3em;
+            animation: spin 2s linear infinite;
         }
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-10px);
-            }
-            60% {
-                transform: translateY(-5px);
-            }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <h1>Creando evento...</h1>
     
-    <!-- Flecha de instrucción -->
-    <div id="arrow" class="arrow">↓</div>
+    <!-- Engranaje animado -->
+    <div id="gear" class="gear">⚙️</div>
 
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script>
@@ -53,11 +46,12 @@
             const startDate = nextMonth.toISOString().replace(/[-:]/g, '').split('.')[0];
             const endDate = new Date(nextMonth.setHours(nextMonth.getHours() + 2)).toISOString().replace(/[-:]/g, '').split('.')[0];
 
+            // Actualizar el título del evento a "PASAR DIARIO"
             const icsContent = `
 BEGIN:VCALENDAR
 VERSION:2.0
 BEGIN:VEVENT
-SUMMARY:Evento en un mes
+SUMMARY:PASAR DIARIO
 DTSTART:${startDate}
 DTEND:${endDate}
 DESCRIPTION:Descripción del evento
