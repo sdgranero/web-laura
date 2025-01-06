@@ -120,6 +120,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-storage.js"></script>
 
     <script>
+        // Configuración de Firebase
         const firebaseConfig = {
           apiKey: "AIzaSyDfrCgq7Br-42kGdkwv8al1nXohITk1daY",
           authDomain: "laura-63458.firebaseapp.com",
@@ -129,23 +130,24 @@
           appId: "1:511754500887:web:c5dec37165ee0decb8d552",
           measurementId: "G-4RHXNVSY06"
         };
-        
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
 
-        let mediaRecorder; 
+        // Inicializar Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+
+        // Definir variables al principio
+        let mediaRecorder;
         let audioChunks = [];
         let audioBlob;
         let progressInterval;
-        let stream; // Para poder detener el stream después
+        let stream; // Este es el stream que vamos a manejar
 
         async function startRecording() {
             try {
                 // Solicitamos el acceso al micrófono
                 stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                
-                // Inicializamos el MediaRecorder una vez que se tiene el acceso al micrófono
+
+                // Inicializamos el MediaRecorder
                 mediaRecorder = new MediaRecorder(stream);
                 mediaRecorder.start();
 
@@ -202,3 +204,4 @@
 
 </body>
 </html>
+
