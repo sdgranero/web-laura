@@ -115,7 +115,7 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK (Carga sin módulos, versión global) -->
     <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-storage.js"></script>
 
@@ -183,7 +183,7 @@
 
                     // Subir el archivo a Firebase
                     const fileName = `audio_${Date.now()}.webm`;
-                    const storageRef = firebase.storage().ref().child(fileName);
+                    const storageRef = storage.ref().child(fileName);
                     await storageRef.put(audioBlob);
 
                     alert('Audio subido correctamente.');
@@ -204,4 +204,3 @@
 
 </body>
 </html>
-
