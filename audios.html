@@ -122,9 +122,11 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Configuración de Supabase
-            const supabaseUrl = 'https://evajsorhnvuhmqznsxyb.supabase.co'; // Cambia esto por tu URL de Supabase
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2YWpzb3JobnZ1aG1xem5zeHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxOTk3MzUsImV4cCI6MjA1MTc3NTczNX0.6rpRY5LnVI1drZvm2avoQmMoP8mVRFXSQSFSkEe4xt0'; // Cambia esto por tu API Key de Supabase
-            const supabase = supabase.createClient(supabaseUrl, supabaseKey); // Crear el cliente Supabase
+            import { createClient } from '@supabase/supabase-js'
+            
+            const supabaseUrl = 'https://evajsorhnvuhmqznsxyb.supabase.co'
+            const supabaseKey = process.env.SUPABASE_KEY
+            const supabase = createClient(supabaseUrl, supabaseKey)
 
             let mediaRecorder;
             let audioChunks = [];
