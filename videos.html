@@ -63,26 +63,12 @@
 <body>
 
     <div class="container">
-        <h1>Reproductor de Audio y Video</h1>
-        
-        <!-- Reproductor de Audio -->
-        <div class="audio-player">
-            <audio id="audioPlayer" controls>
-                <source src="audio-example.mp3" type="audio/mp3">
-                Tu navegador no soporta el elemento de audio.
-            </audio>
-        </div>
-
-        <!-- Controles del reproductor de Audio -->
-        <div class="controls">
-            <button class="button" onclick="toggleAudio()">Reproducir/Pausar</button>
-            <input type="range" id="audioVolume" class="volume-slider" min="0" max="1" step="0.1" value="1" onchange="setAudioVolume(this.value)">
-        </div>
+        <h1>Reproductor Video</h1>
 
         <!-- Reproductor de Video -->
         <div class="video-player">
             <video id="videoPlayer" controls>
-                <source src=5_minutos.mp4" type="video/mp4">
+                <source src=tentacion.mp4" type="video/mp4">
                 Tu navegador no soporta el elemento de video.
             </video>
         </div>
@@ -95,22 +81,6 @@
     </div>
 
     <script>
-        // Función para reproducir o pausar el audio
-        function toggleAudio() {
-            const audioPlayer = document.getElementById('audioPlayer');
-            if (audioPlayer.paused) {
-                audioPlayer.play();
-            } else {
-                audioPlayer.pause();
-            }
-        }
-
-        // Función para ajustar el volumen del audio
-        function setAudioVolume(volume) {
-            const audioPlayer = document.getElementById('audioPlayer');
-            audioPlayer.volume = volume;
-        }
-
         // Función para reproducir o pausar el video
         function toggleVideo() {
             const videoPlayer = document.getElementById('videoPlayer');
