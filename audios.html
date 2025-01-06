@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grabador de Audio</title>
+    <title>Grabador de Audio con Firebase</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -65,65 +65,60 @@
         </div>
     </div>
 
-    <!-- Incluye los scripts de Firebase -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-storage.js"></script>
 
     <script>
-        import { initializeApp } from "firebase/app";
-        import { getAnalytics } from "firebase/analytics";
         // Configuración de Firebase
         const firebaseConfig = {
-          apiKey: "AIzaSyDfrCgq7Br-42kGdkwv8al1nXohITk1daY",
-          authDomain: "laura-63458.firebaseapp.com",
-          projectId: "laura-63458",
-          storageBucket: "laura-63458.firebasestorage.app",
-          messagingSenderId: "511754500887",
-          appId: "1:511754500887:web:c5dec37165ee0decb8d552",
-          measurementId: "G-4RHXNVSY06"
+            apiKey: "AIzaSyDfrCgq7Br-42kGdkwv8al1nXohITk1daY",
+            authDomain: "laura-63458.firebaseapp.com",
+            projectId: "laura-63458",
+            storageBucket: "laura-63458.firebasestorage.app",
+            messagingSenderId: "511754500887",
+            appId: "1:511754500887:web:c5dec37165ee0decb8d552"
         };
 
         // Inicializar Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const storage = firebase.storage();
 
-        // Variables para el grabador
         let mediaRecorder;
         let audioChunks = [];
 
-        function startRecording() {
-            navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(stream => {
-                    mediaRecorder = new MediaRecorder(stream);
-                    mediaRecorder.start();
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.start();
 
-                    audioChunks = [];
-                    mediaRecorder.ondataavailable = event => {
-                        audioChunks.push(event.data);
-                    };
+                audioChunks = [];
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
 
-                    mediaRecorder.onstop = async () => {
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                        const audioURL = URL.createObjectURL(audioBlob);
-                        const audioElement = document.createElement('audio');
-                        audioElement.src = audioURL;
-                        audioElement.controls = true;
-                        document.getElementById('audioList').appendChild(audioElement);
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const audioURL = URL.createObjectURL(audioBlob);
+                    const audioElement = document.createElement('audio');
+                    audioElement.src = audioURL;
+                    audioElement.controls = true;
+                    document.getElementById('audioList').appendChild(audioElement);
 
-                        // Subir el archivo a Firebase
-                        const fileName = `audio_${Date.now()}.webm`;
-                        const storageRef = firebase.storage().ref().child(fileName);
-                        await storageRef.put(audioBlob);
+                    // Subir el archivo a Firebase
+                    const fileName = `audio_${Date.now()}.webm`;
+                    const storageRef = firebase.storage().ref().child(fileName);
+                    await storageRef.put(audioBlob);
 
-                        alert('Audio subido correctamente a la nube.');
-                    };
+                    alert('Audio subido correctamente a la nube.');
+                };
 
-                    document.querySelector('.start').disabled = true;
-                    document.querySelector('.stop').disabled = false;
-                })
-                .catch(error => {
-                    console.error('Error al acceder al micrófono:', error);
-                });
+                document.querySelector('.start').disabled = true;
+                document.querySelector('.stop').disabled = false;
+            } catch (error) {
+                alert('No se pudo acceder al micrófono: ' + error.message);
+            }
         }
 
         function stopRecording() {
@@ -132,5 +127,6 @@
             document.querySelector('.stop').disabled = true;
         }
     </script>
+
 </body>
 </html>
