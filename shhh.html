@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Restringido</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('princess.jpg'); /* Ruta de la imagen */
+            background-size: cover; /* Asegura que la imagen cubra toda la pantalla */
+            background-position: center center; /* Centra la imagen */
+            background-attachment: fixed; /* Fija la imagen al hacer scroll */
+            background-repeat: no-repeat; /* Evita que la imagen se repita */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Contenedor del formulario */
+        .container {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #ccc;
+            background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semitransparente */
+            border-radius: 10px;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .content {
+            display: none;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .content.show {
+            display: block;
+        }
+
+        /* Ajustes para dispositivos móviles */
+        @media (max-width: 768px) {
+            .container {
+                width: 80%;
+                padding: 15px;
+            }
+
+            h2, h3 {
+                font-size: 1.2em;
+            }
+
+            input[type="password"], button {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Only</h2>
+        <h3>Treatment</h3>
+        
+        <input type="password" id="password" placeholder="Introduce la contraseña">
+        <button onclick="checkPassword()">Entrar</button>
+
+        <div id="content" class="content">
+            <h1>Bienvenido, acceso concedido</h1>
+            <p>Este es el contenido de la página privada.</p>
+        </div>
+    </div>
+
+    <script>
+        function checkPassword() {
+            const passwordInput = document.getElementById('password').value;
+            const correctPassword = 'princess'; // Contraseña correcta
+            const content = document.getElementById('content');
+
+            if (passwordInput === correctPassword) {
+                content.classList.add('show'); // Muestra el contenido si la contraseña es correcta
+                document.querySelector('.container').innerHTML = "<h1>Bienvenido</h1><p>Acceso concedido al contenido</p>"; // Reemplaza la caja de contraseña con el mensaje de acceso
+            } else {
+                alert('Contraseña incorrecta. Inténtalo de nuevo.');
+            }
+        }
+    </script>
+
+</body>
+</html>
