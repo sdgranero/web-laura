@@ -5,97 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grabador de Audio</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .container {
-            text-align: center;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-
-        h1 {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .buttons {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 15px;
-            font-size: 18px;
-            border-radius: 50%;
-            cursor: pointer;
-            width: 70px;
-            height: 70px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: background-color 0.3s;
-        }
-
-        button:disabled {
-            background-color: #ccc;
-        }
-
-        .stop-btn {
-            background-color: #f44336;
-        }
-
-        .stop-btn:disabled {
-            background-color: #ddd;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 10px;
-            background-color: #eee;
-            border-radius: 5px;
-            margin-top: 20px;
-            display: none;
-        }
-
-        .progress {
-            height: 100%;
-            background-color: #4CAF50;
-            border-radius: 5px;
-            width: 0;
-        }
-
-        .audio-list {
-            margin-top: 20px;
-        }
-
-        audio {
-            margin-top: 10px;
-            width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .audio-item {
-            margin-bottom: 10px;
-        }
+        /* Tu estilo aquí */
     </style>
 </head>
 <body>
@@ -120,6 +30,12 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // Asegurarse de que Supabase esté correctamente inicializado
+            if (typeof supabase === 'undefined') {
+                console.error("Supabase no se ha inicializado correctamente.");
+                return;
+            }
+
             // Configuración de Supabase
             const supabaseUrl = 'https://evajsorhnvuhmqznsxyb.supabase.co';
             const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2YWpzb3JobnZ1aG1xem5zeHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxOTk3MzUsImV4cCI6MjA1MTc3NTczNX0.6rpRY5LnVI1drZvm2avoQmMoP8mVRFXSQSFSkEe4xt0'; // Reemplaza con tu Supabase Key
