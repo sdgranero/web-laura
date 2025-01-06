@@ -5,50 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acceso Restringido</title>
     <style>
-        /* Estilos generales */
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-image: url('princess.jpg'); /* Ruta de la imagen */
-            background-size: cover; /* Asegura que la imagen cubra toda la pantalla */
-            background-position: center center; /* Centra la imagen */
-            background-attachment: fixed; /* Fija la imagen al hacer scroll */
-            background-repeat: no-repeat; /* Evita que la imagen se repita */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
+            background-image: url('princess.jpg'); /* Imagen de fondo */
+            background-size: contain; /* Asegura que la imagen se vea entera */
+            background-position: center center; /* Centra la imagen */
+            background-repeat: no-repeat; /* No repetir la imagen */
+            background-color: #f0e1d2; /* Color de fondo similar a la imagen para rellenar el espacio */
         }
 
-        /* Contenedor del formulario */
         .container {
             text-align: center;
             padding: 20px;
             border: 2px solid #ccc;
-            background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semitransparente */
+            background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semi-transparente para la caja */
             border-radius: 10px;
-            width: 300px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 250px; /* Reducir el tamaño de la caja */
+            margin: auto;
         }
 
-        h2 {
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        h3 {
-            margin-top: 0;
-            color: #333;
+        h2, h3 {
+            margin: 0;
+            padding: 0;
         }
 
         input[type="password"] {
             width: 100%;
             padding: 10px;
-            margin-bottom: 20px;
+            margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
-            font-size: 16px;
         }
 
         button {
@@ -75,19 +66,18 @@
             display: block;
         }
 
-        /* Ajustes para dispositivos móviles */
+        /* Estilos para dispositivos móviles */
         @media (max-width: 768px) {
             .container {
                 width: 80%;
-                padding: 15px;
             }
 
             h2, h3 {
-                font-size: 1.2em;
+                font-size: 1.5em;
             }
 
-            input[type="password"], button {
-                font-size: 16px;
+            button {
+                width: 100%;
             }
         }
     </style>
@@ -96,10 +86,11 @@
 
     <div class="container">
         <h2>Only</h2>
-        <h3>Treatment</h3>
         
         <input type="password" id="password" placeholder="Introduce la contraseña">
         <button onclick="checkPassword()">Entrar</button>
+
+        <h3>Treatment</h3>
 
         <div id="content" class="content">
             <h1>Bienvenido, acceso concedido</h1>
