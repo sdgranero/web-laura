@@ -113,7 +113,7 @@
 
                     mediaRecorder.onstop = async () => {
                     clearInterval(progressInterval);
-                    audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                     
                     // Verifica el tipo MIME del Blob
                     console.log(audioBlob.type);  // Esto debería imprimir 'audio/webm' si todo está correcto
