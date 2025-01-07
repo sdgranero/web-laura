@@ -113,7 +113,7 @@
 
                     mediaRecorder.onstop = async () => {
                     clearInterval(progressInterval);
-                    audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    audioBlob = new Blob(audioChunks, { type: 'audio/aac' });
                     
                     // Verifica el tipo MIME del Blob
                     console.log(audioBlob.type);  // Esto debería imprimir 'audio/webm' si todo está correcto
@@ -128,7 +128,7 @@
                     document.getElementById('audioList').appendChild(audioItem);
                 
                     // Subir el archivo a Supabase
-                    const fileName = `audio_${Date.now()}.wav`;
+                    const fileName = `audio_${Date.now()}.aac`;
                     const { data, error } = await supabase
                         .storage
                         .from('audios') // Asegúrate de que el bucket esté configurado correctamente
