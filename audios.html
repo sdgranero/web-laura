@@ -6,12 +6,97 @@
     <title>Grabador de Audio</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/green-audio-player/1.2.4/green-audio-player.min.css" rel="stylesheet">
     <style>
-        /* ... (estilos actuales no cambian) ... */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #181818;
+            color: white;
+        }
+        .container {
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            background-color: #2c2c2c;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        .buttons {
+            margin-bottom: 20px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 20px;
+            display: none;
+            position: relative;
+            background-color: #333;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            animation: wave-animation 1s ease-in-out infinite;
+        }
+        .wave {
+            width: 5px;
+            height: 20%;
+            background-color: #4caf50;
+            border-radius: 2px;
+        }
+        .audio-list {
+            margin-top: 20px;
+            width: 100%;
+        }
+        .audio-item {
+            margin-bottom: 10px;
+        }
+        button {
+            font-size: 24px;
+            padding: 12px 25px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: #4caf50;
+            border: none;
+            color: white;
+            border-radius: 50px;
+            transition: background-color 0.3s;
+        }
+        button:disabled {
+            background-color: #aaa;
+        }
+        button:hover:not(:disabled) {
+            background-color: #45a049;
+        }
+
+        @keyframes wave-animation {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-30px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
+
     <div class="container">
         <h1>Grabador de Audio</h1>
         <div class="buttons">
@@ -19,6 +104,7 @@
             <button class="stop-btn" disabled><i class="fas fa-stop"></i></button>
         </div>
 
+        <!-- Barra de progreso simulando ondas -->
         <div class="progress-bar" id="progressBar">
             <div class="progress-wave" id="progressWave"></div>
         </div>
@@ -28,13 +114,11 @@
         </div>
     </div>
 
-    <!-- Incluye GreenAudioPlayer antes de tu script principal -->
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/green-audio-player/1.2.4/green-audio-player.min.js"></script>
-
-    <script defer type="module">
+    <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
+             // Configuración de Supabase
             const supabaseUrl = 'https://evajsorhnvuhmqznsxyb.supabase.co';
             const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2YWpzb3JobnZ1aG1xem5zeHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxOTk3MzUsImV4cCI6MjA1MTc3NTczNX0.6rpRY5LnVI1drZvm2avoQmMoP8mVRFXSQSFSkEe4xt0'; // Reemplaza con tu clave API
             const supabase = createClient(supabaseUrl, supabaseKey);
@@ -42,8 +126,10 @@
             let mediaRecorder;
             let audioChunks = [];
             let audioBlob;
+            let progressInterval;
             let stream;
 
+            // Función para empezar a grabar
             async function startRecording() {
                 try {
                     stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -59,32 +145,54 @@
                         document.querySelector('.start-btn').disabled = true;
                         document.querySelector('.stop-btn').disabled = false;
                         document.getElementById('progressBar').style.display = 'block';
+                        
+                        // Crear ondas de progreso
                         createWaveAnimation();
+
+                        let progress = 0;
+                        progressInterval = setInterval(() => {
+                            if (progress < 100) {
+                                progress++;
+                            }
+                        }, 100);
                     };
 
                     mediaRecorder.onstop = async () => {
+                        clearInterval(progressInterval);
                         audioBlob = new Blob(audioChunks, { type: 'audio/mpeg' });
+                        
+                        // Crear URL de audio grabado
                         const audioURL = URL.createObjectURL(audioBlob);
-                        const audioContainer = document.createElement('div');
-                        audioContainer.classList.add('audio-item');
-
-                        const audioPlayer = document.createElement('audio');
-                        audioPlayer.src = audioURL;
-                        audioPlayer.controls = true;
-                        audioContainer.appendChild(audioPlayer);
-                        document.getElementById('audioList').appendChild(audioContainer);
-
-                        // Inicializa GreenAudioPlayer
-                        new GreenAudioPlayer(audioContainer, { theme: 'dark', stopOthersOnPlay: true });
-
+                        const audioElement = document.createElement('audio');
+                        audioElement.src = audioURL;
+                        audioElement.controls = true;
+                        const audioItem = document.createElement('div');
+                        audioItem.classList.add('audio-item');
+                        audioItem.appendChild(audioElement);
+                        document.getElementById('audioList').appendChild(audioItem);
+                
+                        // Subir el archivo a Supabase
                         const fileName = `audio_${Date.now()}.mp3`;
-                        await supabase.storage.from('audios').upload(fileName, audioBlob);
+                        const { data, error } = await supabase
+                            .storage
+                            .from('audios') 
+                            .upload(fileName, audioBlob, {
+                                cacheControl: '3600',
+                                upsert: false
+                            });
+                
+                        if (error) {
+                            console.error('Error al subir el archivo:', error.message);
+                        } else {
+                            console.log('Archivo subido correctamente:', data);
+                        }
                     };
                 } catch (error) {
                     alert('No se pudo acceder al micrófono: ' + error.message);
                 }
             }
 
+            // Función para detener la grabación
             function stopRecording() {
                 mediaRecorder.stop();
                 stream.getTracks().forEach(track => track.stop());
@@ -93,24 +201,21 @@
                 document.getElementById('progressBar').style.display = 'none';
             }
 
+            // Crear animación de ondas en la barra de progreso
             function createWaveAnimation() {
                 const waveContainer = $('#progressWave');
                 waveContainer.empty();
                 for (let i = 0; i < 50; i++) {
                     const wave = $('<div class="wave"></div>');
-                    wave.css('height', Math.random() * 80 + '%');
                     waveContainer.append(wave);
                 }
-                setInterval(() => {
-                    waveContainer.children().each(function () {
-                        $(this).css('height', Math.random() * 80 + '%');
-                    });
-                }, 200);
             }
 
+            // Asignar eventos a los botones
             document.querySelector('.start-btn').addEventListener('click', startRecording);
             document.querySelector('.stop-btn').addEventListener('click', stopRecording);
         });
     </script>
+
 </body>
 </html>
