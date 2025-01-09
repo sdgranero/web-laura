@@ -41,13 +41,34 @@
         }
         .text {
             font-family: 'Courier Prime', monospace;
-            font-size: 1em; /* Reducido el tamaño de la fuente */
+            font-size: 1.2em; /* Reducido el tamaño de la fuente para pantallas grandes */
             color: #e0e0e0; /* Color claro para el texto */
             line-height: 1.6;
             max-width: 100%;
             text-align: left;
             white-space: pre-wrap; /* Respetar los saltos de línea */
             word-wrap: break-word;
+        }
+
+        /* Ajustes para pantallas pequeñas */
+        @media screen and (max-width: 768px) {
+            .text {
+                font-size: 1em; /* Reducir tamaño de la fuente en pantallas pequeñas */
+            }
+        }
+
+        /* Ajustes para pantallas móviles */
+        @media screen and (max-width: 480px) {
+            h1 {
+                font-size: 1.5em; /* Reducir tamaño del título en pantallas muy pequeñas */
+            }
+            .container {
+                width: 95%; /* Ampliar el contenedor para pantallas pequeñas */
+                height: auto; /* Dejar que el contenido se ajuste a la altura */
+            }
+            .text {
+                font-size: 0.9em; /* Reducir un poco más el tamaño del texto */
+            }
         }
     </style>
 </head>
