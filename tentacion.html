@@ -41,12 +41,15 @@
         /* Reproductor de video con marco */
         .video-player {
             width: 100%;
+            max-width: 650px; /* Ajustamos el tamaño máximo */
             margin-bottom: 20px;
             display: block;
             position: relative;
             border-radius: 10px;
             border: 10px solid #9c27b0; /* Marco morado */
             box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7);
+            background-color: black; /* Fondo negro para el reproductor */
+            object-fit: contain; /* Asegura que el video no se corte */
         }
 
         /* Modo Cine */
@@ -77,8 +80,12 @@
         /* Media Queries para móviles */
         @media screen and (max-width: 768px) {
             .video-player {
-                width: 100%;
+                width: 90%; /* Reducimos el tamaño del video */
                 max-width: 100%;
+            }
+
+            .container {
+                padding: 0 10px;
             }
         }
 
