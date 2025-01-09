@@ -116,62 +116,39 @@
 
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-    
+
         document.addEventListener("DOMContentLoaded", function() {
-            // Configuración de Supabase
+             // Configuración de Supabase
             const supabaseUrl = 'https://evajsorhnvuhmqznsxyb.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2YWpzb3JobnZ1aG1xem5zeHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxOTk3MzUsImV4cCI6MjA1MTc3NTczNX0.6rpRY5LnVI1drZvm2avoQmMoP8mVRFXSQSFSkEe4xt0';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2YWpzb3JobnZ1aG1xem5zeHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxOTk3MzUsImV4cCI6MjA1MTc3NTczNX0.6rpRY5LnVI1drZvm2avoQmMoP8mVRFXSQSFSkEe4xt0'; // Reemplaza con tu clave API
             const supabase = createClient(supabaseUrl, supabaseKey);
-    
+
             let mediaRecorder;
             let audioChunks = [];
             let audioBlob;
             let progressInterval;
             let stream;
-    
-            // Función para inicializar los audios desde el localStorage
-            function loadAudiosFromLocalStorage() {
-                const storedAudios = JSON.parse(localStorage.getItem('audioUrls')) || [];
-                storedAudios.forEach(audioUrl => displayAudio(audioUrl));
-            }
-    
-            // Función para guardar una nueva URL en el localStorage
-            function saveAudioToLocalStorage(url) {
-                const storedAudios = JSON.parse(localStorage.getItem('audioUrls')) || [];
-                storedAudios.push(url);
-                localStorage.setItem('audioUrls', JSON.stringify(storedAudios));
-            }
-    
-            // Función para mostrar un audio en la lista
-            function displayAudio(audioUrl) {
-                const audioElement = document.createElement('audio');
-                audioElement.src = audioUrl;
-                audioElement.controls = true;
-                const audioItem = document.createElement('div');
-                audioItem.classList.add('audio-item');
-                audioItem.appendChild(audioElement);
-                document.getElementById('audioList').appendChild(audioItem);
-            }
-    
+
             // Función para empezar a grabar
             async function startRecording() {
                 try {
                     stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                     mediaRecorder = new MediaRecorder(stream);
                     mediaRecorder.start();
-    
+
                     audioChunks = [];
                     mediaRecorder.ondataavailable = event => {
                         audioChunks.push(event.data);
                     };
-    
+
                     mediaRecorder.onstart = () => {
                         document.querySelector('.start-btn').disabled = true;
                         document.querySelector('.stop-btn').disabled = false;
                         document.getElementById('progressBar').style.display = 'block';
                         
+                        // Crear ondas de progreso
                         createWaveAnimation();
-    
+
                         let progress = 0;
                         progressInterval = setInterval(() => {
                             if (progress < 100) {
@@ -179,11 +156,21 @@
                             }
                         }, 100);
                     };
-    
+
                     mediaRecorder.onstop = async () => {
                         clearInterval(progressInterval);
                         audioBlob = new Blob(audioChunks, { type: 'audio/mpeg' });
-    
+                        
+                        // Crear URL de audio grabado
+                        const audioURL = URL.createObjectURL(audioBlob);
+                        const audioElement = document.createElement('audio');
+                        audioElement.src = audioURL;
+                        audioElement.controls = true;
+                        const audioItem = document.createElement('div');
+                        audioItem.classList.add('audio-item');
+                        audioItem.appendChild(audioElement);
+                        document.getElementById('audioList').appendChild(audioItem);
+                
                         // Subir el archivo a Supabase
                         const fileName = `audio_${Date.now()}.mp3`;
                         const { data, error } = await supabase
@@ -193,25 +180,18 @@
                                 cacheControl: '3600',
                                 upsert: false
                             });
-    
+                
                         if (error) {
                             console.error('Error al subir el archivo:', error.message);
                         } else {
                             console.log('Archivo subido correctamente:', data);
-    
-                            // Crear URL pública del archivo
-                            const { publicUrl } = supabase.storage.from('audios').getPublicUrl(fileName);
-                            if (publicUrl) {
-                                displayAudio(publicUrl);
-                                saveAudioToLocalStorage(publicUrl);
-                            }
                         }
                     };
                 } catch (error) {
                     alert('No se pudo acceder al micrófono: ' + error.message);
                 }
             }
-    
+
             // Función para detener la grabación
             function stopRecording() {
                 mediaRecorder.stop();
@@ -220,7 +200,7 @@
                 document.querySelector('.stop-btn').disabled = true;
                 document.getElementById('progressBar').style.display = 'none';
             }
-    
+
             // Crear animación de ondas en la barra de progreso
             function createWaveAnimation() {
                 const waveContainer = $('#progressWave');
@@ -230,10 +210,7 @@
                     waveContainer.append(wave);
                 }
             }
-    
-            // Cargar los audios guardados en el localStorage al inicio
-            loadAudiosFromLocalStorage();
-    
+
             // Asignar eventos a los botones
             document.querySelector('.start-btn').addEventListener('click', startRecording);
             document.querySelector('.stop-btn').addEventListener('click', stopRecording);
