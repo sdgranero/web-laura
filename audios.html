@@ -138,22 +138,20 @@
                         createWaveAnimation();
                     };
 
-                    mediaRecorder.onstop = async () => {
+                   mediaRecorder.onstop = async () => {
+                        clearInterval(progressInterval);
                         audioBlob = new Blob(audioChunks, { type: 'audio/mpeg' });
                         
                         // Crear URL de audio grabado
                         const audioURL = URL.createObjectURL(audioBlob);
-                        const audioContainer = document.createElement('div');
-                        audioContainer.classList.add('audio-item');
-                        
-                        const audioPlayer = document.createElement('audio');
-                        audioPlayer.src = audioURL;
-                        audioContainer.appendChild(audioPlayer);
-                        document.getElementById('audioList').appendChild(audioContainer);
-
-                        // Aplicar estilo vintage al reproductor
-                        new GreenAudioPlayer(audioContainer, { theme: 'dark', stopOthersOnPlay: true });
-
+                        const audioElement = document.createElement('audio');
+                        audioElement.src = audioURL;
+                        audioElement.controls = true;
+                        const audioItem = document.createElement('div');
+                        audioItem.classList.add('audio-item');
+                        audioItem.appendChild(audioElement);
+                        document.getElementById('audioList').appendChild(audioItem);
+                
                         // Subir el archivo a Supabase
                         const fileName = `audio_${Date.now()}.mp3`;
                         const { data, error } = await supabase
