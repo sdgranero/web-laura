@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tentación</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,6 +17,7 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
+            overflow: hidden;
         }
 
         .container {
@@ -24,9 +26,23 @@
             text-align: center;
         }
 
-        .audio-player, .video-player {
+        .video-player {
             width: 100%;
             margin-bottom: 20px;
+            display: block;
+            position: relative;
+        }
+
+        /* Modo Cine */
+        .cinema-mode {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
         }
 
         .controls {
@@ -58,6 +74,17 @@
         h1 {
             margin-bottom: 20px;
         }
+
+        /* Fondo oscuro cuando el video está en modo cine */
+        .dark-background {
+            background-color: rgba(0, 0, 0, 0.9);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+        }
     </style>
 </head>
 <body>
@@ -72,23 +99,54 @@
                 Tu navegador no soporta el elemento de video.
             </video>
         </div>
+
+        <div class="controls">
+            <button class="button" onclick="toggleVideo()">Play / Pause</button>
+        </div>
+    </div>
+
     <script>
-        // Función para reproducir o pausar el video
-        function toggleVideo() {
+        $(document).ready(function() {
             const videoPlayer = document.getElementById('videoPlayer');
-            if (videoPlayer.paused) {
-                videoPlayer.play();
-            } else {
-                videoPlayer.pause();
+
+            // Función para reproducir o pausar el video
+            function toggleVideo() {
+                if (videoPlayer.paused) {
+                    videoPlayer.play();
+                    // Activar modo cine
+                    enableCinemaMode();
+                } else {
+                    videoPlayer.pause();
+                    // Desactivar modo cine
+                    disableCinemaMode();
+                }
             }
-        }
 
-        // Función para ajustar el volumen del video
-        function setVideoVolume(volume) {
-            const videoPlayer = document.getElementById('videoPlayer');
-            videoPlayer.volume = volume;
-        }
+            // Activar el modo cine
+            function enableCinemaMode() {
+                // Añadir fondo oscuro
+                $('body').addClass('dark-background');
+                // Añadir el contenedor de modo cine
+                $('.video-player').append('<div class="cinema-mode">Modo Cine</div>');
+                // Quitar los controles del video
+                $('#videoPlayer').prop('controls', false);
+            }
+
+            // Desactivar el modo cine
+            function disableCinemaMode() {
+                // Eliminar fondo oscuro
+                $('body').removeClass('dark-background');
+                // Eliminar el contenedor de modo cine
+                $('.cinema-mode').remove();
+                // Mostrar los controles nuevamente
+                $('#videoPlayer').prop('controls', true);
+            }
+
+            // Asignar evento al video para detectar cuando termina de reproducirse
+            videoPlayer.addEventListener('ended', function() {
+                disableCinemaMode();
+            });
+        });
     </script>
-
 </body>
 </html>
