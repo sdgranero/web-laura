@@ -3,31 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photo Canvas</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.2.4/dist/tailwind.min.css" rel="stylesheet">
+    <title>Vintage Photo Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400&display=swap" rel="stylesheet">
     <style>
-        .photo-canvas {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            padding: 10px;
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-            border-radius: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        body {
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f5ec;
+            color: #333;
         }
 
-        .photo-canvas img {
-            width: 100%;
-            height: auto;
+        header {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #dfd3c3;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .gallery img {
+            width: 250px;
+            height: 200px;
             object-fit: cover;
-            border-radius: 10px;
+            border: 5px solid #c2b8a3;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #dfd3c3;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vintagejs/0.4.2/vintage.min.js"></script>
 </head>
-<body class="bg-gray-100 text-gray-800 flex items-center justify-center min-h-screen">
-    <div class="w-full max-w-md">
-        <h1 class="text-center text-2xl font-bold mb-4">My Photo Canvas</h1>
-        <div class="photo-canvas">
+<body>
+    <header>
+        <h1>Vintage Photo Gallery</h1>
+    </header>
+    <main>
+        <div class="gallery">
+            <img src="princess.jpg" alt="Placeholder 1" class="vintage">
+            <img src="seblau.jpg" alt="Placeholder 2"class="vintage">
+            <img src="booty_call.jpg" alt="Placeholder 3"class="vintage">
+            <img src="guardia_civil.jpg" alt="Placeholder 4"class="vintage">
+            <img src="borracha_ella.jpg" alt="Placeholder 5"class="vintage">
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 Vintage Gallery</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const images = document.querySelectorAll('.vintage');
+
+            images.forEach(image => {
+                image.addEventListener('load', () => {
+                    vintagejs(image, {
+                        vignette: 0.5,
+                        sepia: true,
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
             <img src="princess.jpg" alt="Placeholder 1">
             <img src="seblau.jpg" alt="Placeholder 2">
             <img src="booty_call.jpg" alt="Placeholder 3">
