@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tentación</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Fuente para iconos -->
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
@@ -19,6 +20,12 @@
             overflow: hidden;
         }
 
+        h1 {
+            color: #333333; /* Gris oscuro para el título */
+            font-family: 'Courier Prime', monospace;
+            font-size: 2em;
+            margin-top: 20px; /* Para separar un poco el título del contenido */
+        }
         .container {
             width: 90%;
             max-width: 600px; /* Tamaño máximo ajustado para pantallas más pequeñas */
@@ -37,8 +44,7 @@
             margin-bottom: 20px;
             display: block;
             border-radius: 10px;
-            border: 10px solid #9c27b0; /* Marco morado */
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7);
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.9); /* Nuevo borde estilo reproductor */
             background-color: black;
             overflow: hidden;
             margin: 0 auto;
@@ -66,10 +72,6 @@
                 height: auto;
                 padding-bottom: 100%; /* Mantener relación de aspecto */
             }
-        }
-
-        h1 {
-            margin-bottom: 20px;
         }
     </style>
 </head>
