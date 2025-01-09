@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fleabag, el amor y la muerte</title>
+    <!-- Incluir la fuente tipo telegrama -->
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+    <!-- Incluir jQuery (opcional) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column; /* Añadido para que el título y el contenido estén alineados */
+        }
+        h1 {
+            color: #333333; /* Gris oscuro para el título */
+            font-family: 'Courier Prime', monospace;
+            font-size: 2em;
+            margin-top: 20px; /* Para separar un poco el título del contenido */
+        }
+        .container {
+            position: relative;
+            width: 80%;
+            height: 80%;
+            background-color: #3d3d3d; /* Fondo oscuro */
+            background-image: url('ruta/a/tu/imagen-de-papel.jpg');
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            box-sizing: border-box;
+            overflow: auto; /* Permite que el contenido se ajuste */
+        }
+        .text {
+            font-family: 'Courier Prime', monospace;
+            font-size: 1em; /* Reducido el tamaño de la fuente */
+            color: #e0e0e0; /* Color claro para el texto */
+            line-height: 1.6;
+            max-width: 100%;
+            text-align: left;
+            white-space: pre-wrap; /* Respetar los saltos de línea */
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <h1>Le manque</h1>
+    <div class="container">
+        <div class="text">
+          Tu me manques
+          me suis-je dit tout bas
+          Tu me manques
+          et je reviens sûr toi.
+
+          Tu me manques
+          souvenirs flous parfois
+          c'est étrange
+          mais je te cherche là.
+
+          Je me mamnque
+          avec toi dans mes bras
+          Je me manque
+          en rêvant tout bas
+
+          Je t'aime
+          Je te l'ai dit en rêve
+          aussi belle
+          tant en âme qu'en être.
+        </div>
+    </div>
+    <!-- Script para animaciones con jQuery (opcional) -->
+    <script>
+        $(document).ready(function() {
+            $('.text').fadeIn(2000);
+        });
+    </script>
+</body>
+</html>
