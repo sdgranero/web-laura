@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tentación</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vintage-js@1.1.0/dist/vintage.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,76 +14,47 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-color: #121212;
+            background-color: #2c2c2c; /* Gris oscuro como fondo */
             color: white;
             overflow: hidden;
         }
 
-        /* Efecto de Vintage en el fondo */
-        .vintage-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
         .container {
             width: 90%;
-            max-width: 900px;
+            max-width: 650px; /* Tamaño máximo para pantallas más grandes */
             text-align: center;
             position: relative;
+            margin: 0 auto;
+            padding: 20px;
         }
 
         /* Reproductor de video con marco */
         .video-player {
             width: 100%;
-            max-width: 650px; /* Ajustamos el tamaño máximo */
+            height: auto;
             margin-bottom: 20px;
             display: block;
             position: relative;
             border-radius: 10px;
             border: 10px solid #9c27b0; /* Marco morado */
             box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7);
-            background-color: black; /* Fondo negro para el reproductor */
+            background-color: black;
             object-fit: contain; /* Asegura que el video no se corte */
+            display: block;
+            max-width: 100%;
+            margin: 0 auto;
         }
 
-        /* Modo Cine */
-        .cinema-mode {
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 10px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10;
-            color: white;
-            font-size: 24px;
-        }
-
-        /* Fondo oscuro cuando el video está en modo cine */
-        .dark-background {
-            background-color: rgba(0, 0, 0, 0.9);
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 5;
-        }
-
-        /* Media Queries para móviles */
+        /* Media Queries para dispositivos pequeños */
         @media screen and (max-width: 768px) {
-            .video-player {
-                width: 90%; /* Reducimos el tamaño del video */
-                max-width: 100%;
+            .container {
+                width: 100%;
+                padding: 10px;
             }
 
-            .container {
-                padding: 0 10px;
+            .video-player {
+                width: 100%;
+                height: auto;
             }
         }
 
@@ -95,8 +64,6 @@
     </style>
 </head>
 <body>
-
-    <div class="vintage-background" id="vintageBackground"></div>
 
     <div class="container">
         <h1>Tentación</h1>
@@ -108,59 +75,7 @@
                 Tu navegador no soporta el elemento de video.
             </video>
         </div>
-
     </div>
 
-    <script>
-        $(document).ready(function() {
-            const videoPlayer = document.getElementById('videoPlayer');
-
-            // Función para reproducir o pausar el video
-            function toggleVideo() {
-                if (videoPlayer.paused) {
-                    videoPlayer.play();
-                    // Activar modo cine
-                    enableCinemaMode();
-                } else {
-                    videoPlayer.pause();
-                    // Desactivar modo cine
-                    disableCinemaMode();
-                }
-            }
-
-            // Activar el modo cine
-            function enableCinemaMode() {
-                // Añadir fondo oscuro
-                $('body').addClass('dark-background');
-                // Añadir el contenedor de modo cine
-                $('.video-player').append('<div class="cinema-mode">Modo Cine</div>');
-                // Quitar los controles del video
-                $('#videoPlayer').prop('controls', false);
-            }
-
-            // Desactivar el modo cine
-            function disableCinemaMode() {
-                // Eliminar fondo oscuro
-                $('body').removeClass('dark-background');
-                // Eliminar el contenedor de modo cine
-                $('.cinema-mode').remove();
-                // Mostrar los controles nuevamente
-                $('#videoPlayer').prop('controls', true);
-            }
-
-            // Asignar evento al video para detectar cuando termina de reproducirse
-            videoPlayer.addEventListener('ended', function() {
-                disableCinemaMode();
-            });
-
-            // Aplicar el fondo vintage al cargar la página
-            const vintageEffect = new Vintage({
-                target: '#vintageBackground', // Aplicar el fondo vintage al div
-                effect: 'film',  // Tipo de efecto retro
-                opacity: 0.4      // Opacidad del efecto vintage
-            });
-            vintageEffect.start();
-        });
-    </script>
 </body>
 </html>
