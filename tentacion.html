@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tentación</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vintage-js@1.1.0/dist/vintage.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: white;
             margin: 0;
             padding: 0;
             display: flex;
@@ -17,20 +16,37 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
+            background-color: #121212;
+            color: white;
             overflow: hidden;
+        }
+
+        /* Efecto de Vintage en el fondo */
+        .vintage-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
 
         .container {
             width: 90%;
             max-width: 900px;
             text-align: center;
+            position: relative;
         }
 
+        /* Reproductor de video con marco */
         .video-player {
             width: 100%;
             margin-bottom: 20px;
             display: block;
             position: relative;
+            border-radius: 10px;
+            border: 10px solid #9c27b0; /* Marco morado */
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7);
         }
 
         /* Modo Cine */
@@ -43,36 +59,8 @@
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 10;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .button {
-            background-color: #1DB954;
-            border: none;
             color: white;
-            font-size: 16px;
-            padding: 10px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-        }
-
-        .button:hover {
-            background-color: #1ed760;
-        }
-
-        .volume-slider {
-            width: 100px;
-        }
-
-        h1 {
-            margin-bottom: 20px;
+            font-size: 24px;
         }
 
         /* Fondo oscuro cuando el video está en modo cine */
@@ -85,24 +73,35 @@
             height: 100%;
             z-index: 5;
         }
+
+        /* Media Queries para móviles */
+        @media screen and (max-width: 768px) {
+            .video-player {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
+
+    <div class="vintage-background" id="vintageBackground"></div>
 
     <div class="container">
         <h1>Tentación</h1>
 
         <!-- Reproductor de Video -->
         <div class="video-player">
-            <video id="videoPlayer" controls>
+            <video id="videoPlayer" controls autoplay>
                 <source src="tentacion.mp4" type="video/mp4">
                 Tu navegador no soporta el elemento de video.
             </video>
         </div>
 
-        <div class="controls">
-            <button class="button" onclick="toggleVideo()">Play / Pause</button>
-        </div>
     </div>
 
     <script>
@@ -146,6 +145,14 @@
             videoPlayer.addEventListener('ended', function() {
                 disableCinemaMode();
             });
+
+            // Aplicar el fondo vintage al cargar la página
+            const vintageEffect = new Vintage({
+                target: '#vintageBackground', // Aplicar el fondo vintage al div
+                effect: 'film',  // Tipo de efecto retro
+                opacity: 0.4      // Opacidad del efecto vintage
+            });
+            vintageEffect.start();
         });
     </script>
 </body>
