@@ -80,6 +80,16 @@
         button:hover:not(:disabled) {
             background-color: #8e24aa;
         }
+
+        /* Animación de icono de grabación */
+        .recording {
+            animation: rotate 2s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -87,8 +97,9 @@
     <div class="container">
         <h1>Grabador de Audio</h1>
         <div class="buttons">
-            <button class="start-btn"><i class="fas fa-microphone"></i></button>
-            <button class="stop-btn" disabled><i class="fas fa-stop"></i></button>
+            <button class="toggle-btn">
+                <i class="fas fa-microphone"></i>
+            </button>
         </div>
 
         <!-- Barra de progreso simulando ondas -->
@@ -116,70 +127,77 @@
             let audioBlob;
             let progressInterval;
             let stream;
+            let isRecording = false; // Variable para controlar el estado de grabación
 
             // Función para empezar a grabar
-            async function startRecording() {
-                try {
-                    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    mediaRecorder = new MediaRecorder(stream);
-                    mediaRecorder.start();
+            async function toggleRecording() {
+                if (!isRecording) {
+                    // Iniciar grabación
+                    try {
+                        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        mediaRecorder = new MediaRecorder(stream);
+                        mediaRecorder.start();
 
-                    audioChunks = [];
-                    mediaRecorder.ondataavailable = event => {
-                        audioChunks.push(event.data);
-                    };
+                        audioChunks = [];
+                        mediaRecorder.ondataavailable = event => {
+                            audioChunks.push(event.data);
+                        };
 
-                    mediaRecorder.onstart = () => {
-                        document.querySelector('.start-btn').disabled = true;
-                        document.querySelector('.stop-btn').disabled = false;
-                        document.getElementById('progressBar').style.display = 'block';
+                        mediaRecorder.onstart = () => {
+                            document.querySelector('.toggle-btn').disabled = false;
+                            document.querySelector('.toggle-btn').classList.add('recording');
+                            document.getElementById('progressBar').style.display = 'block';
 
-                        // Crear ondas dinámicas
-                        createWaveAnimation();
-                    };
+                            // Crear ondas dinámicas
+                            createWaveAnimation();
+                            isRecording = true; // Cambiar el estado
+                        };
 
-                   mediaRecorder.onstop = async () => {
-                        clearInterval(progressInterval);
-                        audioBlob = new Blob(audioChunks, { type: 'audio/mpeg' });
-                        
-                        // Crear URL de audio grabado
-                        const audioURL = URL.createObjectURL(audioBlob);
-                        const audioElement = document.createElement('audio');
-                        audioElement.src = audioURL;
-                        audioElement.controls = true;
-                        const audioItem = document.createElement('div');
-                        audioItem.classList.add('audio-item');
-                        audioItem.appendChild(audioElement);
-                        document.getElementById('audioList').appendChild(audioItem);
-                
-                        // Subir el archivo a Supabase
-                        const fileName = `audio_${Date.now()}.mp3`;
-                        const { data, error } = await supabase
-                            .storage
-                            .from('audios') 
-                            .upload(fileName, audioBlob, {
-                                cacheControl: '3600',
-                                upsert: false
-                            });
-                
-                        if (error) {
-                            console.error('Error al subir el archivo:', error.message);
-                        } else {
-                            console.log('Archivo subido correctamente:', data);
-                        }
-                    };
-                } catch (error) {
-                    alert('No se pudo acceder al micrófono: ' + error.message);
+                        mediaRecorder.onstop = async () => {
+                            clearInterval(progressInterval);
+                            audioBlob = new Blob(audioChunks, { type: 'audio/mpeg' });
+                            
+                            // Crear URL de audio grabado
+                            const audioURL = URL.createObjectURL(audioBlob);
+                            const audioElement = document.createElement('audio');
+                            audioElement.src = audioURL;
+                            audioElement.controls = true;
+                            const audioItem = document.createElement('div');
+                            audioItem.classList.add('audio-item');
+                            audioItem.appendChild(audioElement);
+                            document.getElementById('audioList').appendChild(audioItem);
+                    
+                            // Subir el archivo a Supabase
+                            const fileName = `audio_${Date.now()}.mp3`;
+                            const { data, error } = await supabase
+                                .storage
+                                .from('audios') 
+                                .upload(fileName, audioBlob, {
+                                    cacheControl: '3600',
+                                    upsert: false
+                                });
+                    
+                            if (error) {
+                                console.error('Error al subir el archivo:', error.message);
+                            } else {
+                                console.log('Archivo subido correctamente:', data);
+                            }
+
+                            // Cambiar el estado
+                            document.querySelector('.toggle-btn').classList.remove('recording');
+                            isRecording = false;
+                        };
+                    } catch (error) {
+                        alert('No se pudo acceder al micrófono: ' + error.message);
+                    }
+                } else {
+                    // Detener grabación
+                    mediaRecorder.stop();
+                    stream.getTracks().forEach(track => track.stop());
+                    document.querySelector('.toggle-btn').classList.remove('recording');
+                    document.getElementById('progressBar').style.display = 'none';
+                    isRecording = false;
                 }
-            }
-
-            // Función para detener la grabación
-            function stopRecording() {
-                mediaRecorder.stop();
-                stream.getTracks().forEach(track => track.stop());
-                document.querySelector('.start-btn').disabled = false;
-                document.querySelector('.stop-btn').disabled = true;
-                document.getElementById('progressBar').style.display = 'none';
             }
 
             // Crear animación de ondas dinámicas
@@ -198,9 +216,8 @@
                 }, 200);
             }
 
-            // Asignar eventos a los botones
-            document.querySelector('.start-btn').addEventListener('click', startRecording);
-            document.querySelector('.stop-btn').addEventListener('click', stopRecording);
+            // Asignar evento al botón de grabación
+            document.querySelector('.toggle-btn').addEventListener('click', toggleRecording);
         });
     </script>
 
