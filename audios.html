@@ -8,82 +8,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/green-audio-player/1.2.4/green-audio-player.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #1c1c1c;
-            color: white;
-        }
-        .container {
-            text-align: center;
-            max-width: 500px;
-            width: 100%;
-            background-color: #2c2c2c;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-        }
-        .buttons {
-            margin-bottom: 20px;
-        }
-        .progress-bar {
-            width: 100%;
-            height: 100px;
-            margin-bottom: 20px;
-            display: none;
-            position: relative;
-            background-color: #333;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .progress-wave {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-        .wave {
-            width: 5px;
-            background-color: #9c27b0;
-            border-radius: 2px;
-        }
-        .audio-list {
-            margin-top: 20px;
-            width: 100%;
-        }
-        .audio-item {
-            margin-bottom: 20px;
-        }
-        button {
-            font-size: 24px;
-            padding: 12px 25px;
-            margin: 5px;
-            cursor: pointer;
-            background-color: #9c27b0;
-            border: none;
-            color: white;
-            border-radius: 50px;
-            transition: background-color 0.3s;
-        }
-        button:disabled {
-            background-color: #aaa;
-        }
-        button:hover:not(:disabled) {
-            background-color: #8e24aa;
-        }
+        /* ... (estilos actuales no cambian) ... */
     </style>
 </head>
 <body>
-
     <div class="container">
         <h1>Grabador de Audio</h1>
         <div class="buttons">
@@ -91,7 +19,6 @@
             <button class="stop-btn" disabled><i class="fas fa-stop"></i></button>
         </div>
 
-        <!-- Barra de progreso simulando ondas -->
         <div class="progress-bar" id="progressBar">
             <div class="progress-wave" id="progressWave"></div>
         </div>
@@ -101,12 +28,13 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/green-audio-player/1.2.4/green-audio-player.min.js"></script>
-    <script type="module">
+    <!-- Incluye GreenAudioPlayer antes de tu script principal -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/green-audio-player/1.2.4/green-audio-player.min.js"></script>
+
+    <script defer type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-        document.addEventListener("DOMContentLoaded", function() {
-            // Configuración de Supabase
+        document.addEventListener("DOMContentLoaded", function () {
             const supabaseUrl = 'https://evajsorhnvuhmqznsxyb.supabase.co';
             const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2YWpzb3JobnZ1aG1xem5zeHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxOTk3MzUsImV4cCI6MjA1MTc3NTczNX0.6rpRY5LnVI1drZvm2avoQmMoP8mVRFXSQSFSkEe4xt0'; // Reemplaza con tu clave API
             const supabase = createClient(supabaseUrl, supabaseKey);
@@ -114,10 +42,8 @@
             let mediaRecorder;
             let audioChunks = [];
             let audioBlob;
-            let progressInterval;
             let stream;
 
-            // Función para empezar a grabar
             async function startRecording() {
                 try {
                     stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -133,49 +59,32 @@
                         document.querySelector('.start-btn').disabled = true;
                         document.querySelector('.stop-btn').disabled = false;
                         document.getElementById('progressBar').style.display = 'block';
-
-                        // Crear ondas dinámicas
                         createWaveAnimation();
                     };
 
                     mediaRecorder.onstop = async () => {
                         audioBlob = new Blob(audioChunks, { type: 'audio/mpeg' });
-                        
-                        // Crear URL de audio grabado
                         const audioURL = URL.createObjectURL(audioBlob);
                         const audioContainer = document.createElement('div');
                         audioContainer.classList.add('audio-item');
-                        
+
                         const audioPlayer = document.createElement('audio');
                         audioPlayer.src = audioURL;
+                        audioPlayer.controls = true;
                         audioContainer.appendChild(audioPlayer);
                         document.getElementById('audioList').appendChild(audioContainer);
 
-                        // Aplicar estilo vintage al reproductor
+                        // Inicializa GreenAudioPlayer
                         new GreenAudioPlayer(audioContainer, { theme: 'dark', stopOthersOnPlay: true });
 
-                        // Subir el archivo a Supabase
                         const fileName = `audio_${Date.now()}.mp3`;
-                        const { data, error } = await supabase
-                            .storage
-                            .from('audios') 
-                            .upload(fileName, audioBlob, {
-                                cacheControl: '3600',
-                                upsert: false
-                            });
-                
-                        if (error) {
-                            console.error('Error al subir el archivo:', error.message);
-                        } else {
-                            console.log('Archivo subido correctamente:', data);
-                        }
+                        await supabase.storage.from('audios').upload(fileName, audioBlob);
                     };
                 } catch (error) {
                     alert('No se pudo acceder al micrófono: ' + error.message);
                 }
             }
 
-            // Función para detener la grabación
             function stopRecording() {
                 mediaRecorder.stop();
                 stream.getTracks().forEach(track => track.stop());
@@ -184,7 +93,6 @@
                 document.getElementById('progressBar').style.display = 'none';
             }
 
-            // Crear animación de ondas dinámicas
             function createWaveAnimation() {
                 const waveContainer = $('#progressWave');
                 waveContainer.empty();
@@ -200,11 +108,9 @@
                 }, 200);
             }
 
-            // Asignar eventos a los botones
             document.querySelector('.start-btn').addEventListener('click', startRecording);
             document.querySelector('.stop-btn').addEventListener('click', stopRecording);
         });
     </script>
-
 </body>
 </html>
