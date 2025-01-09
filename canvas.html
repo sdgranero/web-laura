@@ -58,6 +58,7 @@
             font-size: 0.9rem;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vintagejs/0.4.2/vintage.min.js"></script>
 </head>
 <body>
@@ -77,14 +78,12 @@
         <p>&copy; 2025 Vintage Gallery</p>
     </footer>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const images = document.querySelectorAll('.vintage');
-
-            images.forEach(image => {
-                image.addEventListener('load', () => {
-                    vintagejs(image, {
+        $(document).ready(function() {
+            $('.vintage').each(function() {
+                $(this).on('load', function() {
+                    vintagejs(this, {
                         vignette: 0.5,
-                        sepia: true,
+                        sepia: true
                     });
                 });
             });
