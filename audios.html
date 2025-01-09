@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grabador de Audio</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -21,6 +22,10 @@
             text-align: center;
             max-width: 500px;
             width: 100%;
+            background-color: #2c2c2c;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         }
         .buttons {
             margin-bottom: 20px;
@@ -60,14 +65,14 @@
             margin-bottom: 10px;
         }
         button {
-            font-size: 20px;
-            padding: 10px 20px;
+            font-size: 24px;
+            padding: 12px 25px;
             margin: 5px;
             cursor: pointer;
             background-color: #4caf50;
             border: none;
             color: white;
-            border-radius: 5px;
+            border-radius: 50px;
             transition: background-color 0.3s;
         }
         button:disabled {
@@ -95,8 +100,8 @@
     <div class="container">
         <h1>Grabador de Audio</h1>
         <div class="buttons">
-            <button class="start-btn">🎤</button>
-            <button class="stop-btn" disabled>❌</button>
+            <button class="start-btn"><i class="fas fa-microphone"></i></button>
+            <button class="stop-btn" disabled><i class="fas fa-stop"></i></button>
         </div>
 
         <!-- Barra de progreso simulando ondas -->
@@ -117,7 +122,6 @@
             const supabaseUrl = 'https://evajsorhnvuhmqznsxyb.supabase.co';
             const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2YWpzb3JobnZ1aG1xem5zeHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxOTk3MzUsImV4cCI6MjA1MTc3NTczNX0.6rpRY5LnVI1drZvm2avoQmMoP8mVRFXSQSFSkEe4xt0'; // Reemplaza con tu clave API
             const supabase = createClient(supabaseUrl, supabaseKey);
-
 
             let mediaRecorder;
             let audioChunks = [];
