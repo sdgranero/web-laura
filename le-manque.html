@@ -18,29 +18,28 @@
             background-position: center;
             display: flex;
             justify-content: center;
-            align-items: center; /* Centra vertical y horizontalmente */
-            flex-direction: column;
+            align-items: center;
+            flex-direction: column; /* Asegura que el título esté arriba del marco */
         }
         h1 {
             color: #ffffff; /* Título en blanco */
             font-family: 'Courier Prime', monospace;
             font-size: 2em;
-            margin: 20px 0; /* Margen superior e inferior */
+            margin: 20px 0; /* Espaciado del título */
             text-align: center;
         }
         .container {
             position: relative;
-            display: flex; /* Cambiado para usar flexbox */
-            justify-content: center; /* Centrar horizontalmente el contenido */
-            align-items: center; /* Centrar verticalmente el contenido */
             background-image: url('papel.jpg'); /* Fondo de papel */
             background-size: cover;
             background-position: center;
-            border: 1px solid #d4af37; /* Color dorado suave */
+            border: 1px solid #d4af37; /* Borde dorado suave */
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             padding: 20px;
             box-sizing: border-box;
-            overflow: auto; /* Ajusta el contenido si es muy largo */
+            width: auto; /* Ajusta al tamaño del contenido */
+            max-width: 80%;
+            min-width: 300px; /* Evita que el marco sea demasiado pequeño */
         }
         .text {
             font-family: 'Courier Prime', monospace;
@@ -50,13 +49,13 @@
             line-height: 1.6;
             white-space: pre-wrap; /* Respetar saltos de línea */
             word-wrap: break-word;
-            text-align: center; /* Alinear texto al centro */
+            text-align: left; /* Alineación izquierda */
         }
 
         /* Ajustes para pantallas pequeñas */
         @media screen and (max-width: 768px) {
             h1 {
-                font-size: 1.8em; /* Reduce ligeramente el tamaño del título */
+                font-size: 1.8em;
             }
             .text {
                 font-size: 1em;
@@ -67,10 +66,10 @@
         @media screen and (max-width: 480px) {
             h1 {
                 font-size: 1.5em;
-                margin: 10px 0; /* Reduce el margen superior e inferior */
+                margin: 10px 0;
             }
             .container {
-                width: auto; /* Mantiene el ancho dinámico */
+                max-width: 90%; /* Más ancho en pantallas pequeñas */
             }
             .text {
                 font-size: 0.9em;
@@ -92,7 +91,7 @@
           c'est étrange
           mais je te cherche là.
 
-          Je me manque
+          Je me mamnque
           avec toi dans mes bras
           Je me manque
           en rêvant tout bas
