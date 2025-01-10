@@ -30,7 +30,9 @@
         }
         .container {
             position: relative;
-            display: inline-block; /* Ajusta el ancho al contenido */
+            display: flex; /* Cambiado para usar flexbox */
+            justify-content: center; /* Centrar horizontalmente el contenido */
+            align-items: center; /* Centrar verticalmente el contenido */
             background-image: url('papel.jpg'); /* Fondo de papel */
             background-size: cover;
             background-position: center;
@@ -48,6 +50,7 @@
             line-height: 1.6;
             white-space: pre-wrap; /* Respetar saltos de línea */
             word-wrap: break-word;
+            text-align: center; /* Alinear texto al centro */
         }
 
         /* Ajustes para pantallas pequeñas */
@@ -89,7 +92,7 @@
           c'est étrange
           mais je te cherche là.
 
-          Je me mamnque
+          Je me manque
           avec toi dans mes bras
           Je me manque
           en rêvant tout bas
