@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Le Manque</title>
-    <!-- Incluir la fuente tipo telegrama -->
+    <!-- Fuente estilo telegrama -->
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
     <!-- Incluir jQuery (opcional) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -13,61 +13,59 @@
             margin: 0;
             padding: 0;
             height: 100vh;
-            background-color: #f0f0f0;
+            background-image: url('fondo_madera.jpg'); /* Fondo de madera */
+            background-size: cover;
+            background-position: center;
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column; /* Añadido para que el título y el contenido estén alineados */
         }
         h1 {
             color: #333333; /* Gris oscuro para el título */
             font-family: 'Courier Prime', monospace;
             font-size: 2em;
-            margin-top: 20px; /* Para separar un poco el título del contenido */
+            margin-bottom: 20px;
+            text-align: center;
         }
         .container {
             position: relative;
             width: 80%;
-            height: 80%;
-            background-color: #3d3d3d; /* Fondo oscuro */
-            background-image: url('ruta/a/tu/imagen-de-papel.jpg');
+            max-width: 700px;
+            background-image: url('papel.jpg'); /* Fondo de papel */
             background-size: cover;
             background-position: center;
-            border: 1px solid #ccc;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #d4af37; /* Color dorado suave */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             padding: 20px;
             box-sizing: border-box;
-            overflow: auto; /* Permite que el contenido se ajuste */
+            overflow: auto; /* Ajusta el contenido si es muy largo */
         }
         .text {
             font-family: 'Courier Prime', monospace;
-            font-size: 1.2em; /* Reducido el tamaño de la fuente para pantallas grandes */
-            color: #e0e0e0; /* Color claro para el texto */
+            font-size: 1.2em;
+            color: #333333; /* Color más oscuro para mayor contraste */
             line-height: 1.6;
-            max-width: 100%;
-            text-align: left;
-            white-space: pre-wrap; /* Respetar los saltos de línea */
+            white-space: pre-wrap; /* Respetar saltos de línea */
             word-wrap: break-word;
         }
 
         /* Ajustes para pantallas pequeñas */
         @media screen and (max-width: 768px) {
             .text {
-                font-size: 1em; /* Reducir tamaño de la fuente en pantallas pequeñas */
+                font-size: 1em;
             }
         }
 
         /* Ajustes para pantallas móviles */
         @media screen and (max-width: 480px) {
             h1 {
-                font-size: 1.5em; /* Reducir tamaño del título en pantallas muy pequeñas */
+                font-size: 1.5em;
             }
             .container {
-                width: 95%; /* Ampliar el contenedor para pantallas pequeñas */
-                height: auto; /* Dejar que el contenido se ajuste a la altura */
+                width: 90%;
             }
             .text {
-                font-size: 0.9em; /* Reducir un poco más el tamaño del texto */
+                font-size: 0.9em;
             }
         }
     </style>
@@ -97,7 +95,6 @@
           tant en âme qu'en être.
         </div>
     </div>
-    <!-- Script para animaciones con jQuery (opcional) -->
     <script>
         $(document).ready(function() {
             $('.text').fadeIn(2000);
