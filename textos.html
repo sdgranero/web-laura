@@ -66,6 +66,17 @@
             background-color: #660066;
         }
 
+        /* Estilo para la lista de archivos */
+        #fileList {
+            margin-top: 30px;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #fileList li {
+            margin: 10px 0;
+        }
+
         /* Ajustes para pantallas pequeñas */
         @media screen and (max-width: 768px) {
             h1 {
@@ -97,13 +108,19 @@
         <textarea class="text" id="editor" rows="10" placeholder="Escribe aquí..."></textarea>
         <button id="submitBtn">Enviar</button>
     </div>
+
+    <h2>Lista de Archivos</h2>
+    <ul id="fileList"></ul>
+
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-        document.getElementById('submitBtn').addEventListener('click', async () => {
 
-            const supabaseUrl = 'https://evajsorhnvuhmqznsxyb.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2YWpzb3JobnZ1aG1xem5zeHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxOTk3MzUsImV4cCI6MjA1MTc3NTczNX0.6rpRY5LnVI1drZvm2avoQmMoP8mVRFXSQSFSkEe4xt0'; // Reemplaza con tu clave API
-            const supabase = createClient(supabaseUrl, supabaseKey);
+        const supabaseUrl = 'https://evajsorhnvuhmqznsxyb.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2YWpzb3JobnZ1aG1xem5zeHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxOTk3MzUsImV4cCI6MjA1MTc3NTczNX0.6rpRY5LnVI1drZvm2avoQmMoP8mVRFXSQSFSkEe4xt0'; // Reemplaza con tu clave API
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        // Función para subir un archivo de texto
+        document.getElementById('submitBtn').addEventListener('click', async () => {
             const textContent = document.getElementById('editor').value;
 
             if (!textContent.trim()) {
@@ -129,8 +146,49 @@
                 console.log('Archivo subido correctamente:', data);
                 alert('Texto enviado correctamente.');
                 document.getElementById('editor').value = ''; // Limpia el editor
+                fetchFiles(); // Refresca la lista de archivos después de subir uno nuevo
             }
         });
+
+        // Función para obtener y mostrar los archivos del bucket
+        async function fetchFiles() {
+            const bucketName = 'textos';
+            const { data: files, error } = await supabase
+                .storage
+                .from(bucketName)
+                .list();
+
+            if (error) {
+                console.error('Error al listar archivos:', error.message);
+                return;
+            }
+
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = ''; // Limpiar la lista antes de agregar los nuevos elementos
+
+            files.forEach(file => {
+                const fileName = file.name;
+
+                // Obtener URL pública para cada archivo
+                const { data: publicUrl } = supabase
+                    .storage
+                    .from(bucketName)
+                    .getPublicUrl(fileName);
+
+                // Crear un enlace para el archivo
+                const li = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = publicUrl.publicUrl;
+                link.textContent = fileName;
+                link.target = '_blank';
+
+                li.appendChild(link);
+                fileList.appendChild(li);
+            });
+        }
+
+        // Llamar a la función para cargar los archivos al iniciar la página
+        fetchFiles();
     </script>
 </body>
 </html>
