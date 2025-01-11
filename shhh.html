@@ -12,19 +12,18 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-image: url('princess.jpg'), linear-gradient(to bottom, #f0e1d2, #cccccc); /* Imagen de fondo + degradado */
-            background-size: contain; /* Asegura que la imagen se vea completa */
+            background-image: url('princess.jpg'); /* Imagen de fondo */
+            background-size: cover; /* La imagen ocupa todo el fondo */
             background-position: center center;
             background-repeat: no-repeat; /* No repetir la imagen */
-            background-color: #f0e1d2; /* Color de fondo de apoyo */
-            background-blend-mode: overlay; /* Degradado sobre la imagen */
+            background-color: #2c2c2c; /* Fondo gris oscuro */
         }
 
         .container {
             text-align: center;
             padding: 20px;
             border: 2px solid #ccc;
-            background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semi-transparente para la caja */
+            background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semi-transparente */
             border-radius: 10px;
             width: 250px; /* Tamaño reducido de la caja */
             margin: auto;
@@ -47,7 +46,7 @@
         button {
             padding: 5px 10px; /* Ajustado el tamaño del padding */
             border: none;
-            background-color: #4CAF50;
+            background-color: #800080; /* Morado */
             color: white;
             font-size: 16px;
             border-radius: 5px;
@@ -56,7 +55,7 @@
         }
 
         button:hover {
-            background-color: #45a049;
+            background-color: #9932CC; /* Morado más claro al pasar el ratón */
         }
 
         /* Estilos para dispositivos móviles */
