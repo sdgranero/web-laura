@@ -84,6 +84,7 @@
     </div>
 
     <script>
+        // Función para verificar la contraseña
         function checkPassword() {
             const passwordInput = document.getElementById('password').value;
             const correctPassword = 'princess'; // Contraseña correcta
@@ -94,6 +95,13 @@
                 alert('Contraseña incorrecta. Inténtalo de nuevo.');
             }
         }
+
+        // Detectar la tecla Enter en el campo de contraseña
+        document.getElementById('password').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                checkPassword(); // Simula el clic en el botón "Entrar"
+            }
+        });
     </script>
 
 </body>
