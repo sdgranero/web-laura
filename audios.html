@@ -85,6 +85,17 @@
         .recording {
             animation: pulse 1s ease-out infinite;
         }
+         /* Estilo para la lista de archivos */
+        #fileList {
+            margin-top: 30px;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #fileList li {
+            margin: 10px 0;
+        }
+
 
         @keyframes pulse {
             0% {
@@ -229,6 +240,46 @@
             // Asignar evento al botón de grabación
             document.querySelector('.toggle-btn').addEventListener('click', toggleRecording);
         });
+
+                // Función para obtener y mostrar los archivos del bucket
+        async function fetchFiles() {
+            const bucketName = 'audios';
+            const { data: files, error } = await supabase
+                .storage
+                .from(bucketName)
+                .list();
+
+            if (error) {
+                console.error('Error al listar archivos:', error.message);
+                return;
+            }
+
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = ''; // Limpiar la lista antes de agregar los nuevos elementos
+
+            files.forEach(file => {
+                const fileName = file.name;
+
+                // Obtener URL pública para cada archivo
+                const { data: publicUrl } = supabase
+                    .storage
+                    .from(bucketName)
+                    .getPublicUrl(fileName);
+
+                // Crear un enlace para el archivo
+                const li = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = publicUrl.publicUrl;
+                link.textContent = fileName;
+                link.target = '_blank';
+
+                li.appendChild(link);
+                fileList.appendChild(li);
+            });
+        }
+
+        // Llamar a la función para cargar los archivos al iniciar la página
+        fetchFiles();
     </script>
 
 </body>
