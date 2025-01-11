@@ -67,10 +67,25 @@
         }
 
         /* Estilo para la lista de archivos */
-        #fileList {
+        #fileListContainer {
+            position: relative;
+            background-image: url('papel.jpg'); /* Fondo de papel */
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #d4af37; /* Borde dorado suave */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            box-sizing: border-box;
             margin-top: 30px;
+            width: auto;
+            max-width: 80%;
+        }
+
+        #fileList {
+            margin-top: 20px;
             list-style-type: none;
             padding: 0;
+            color: #ffffff; /* Texto blanco */
         }
 
         #fileList li {
@@ -109,8 +124,10 @@
         <button id="submitBtn">Enviar</button>
     </div>
 
-    <h2>Lista de Archivos</h2>
-    <ul id="fileList"></ul>
+    <div id="fileListContainer">
+        <h2 style="color: #ffffff;">Lista de Archivos</h2>
+        <ul id="fileList"></ul>
+    </div>
 
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
