@@ -19,14 +19,14 @@
             background-position: center;
             display: flex;
             justify-content: center;
-            align-items: center;
-            flex-direction: column; /* Asegura que el título esté arriba del marco */
+            align-items: flex-start;
+            flex-direction: column;
         }
         h1 {
             color: #ffffff; /* Título en blanco */
             font-family: 'Courier Prime', monospace;
             font-size: 2em;
-            margin: 20px 0; /* Espaciado del título */
+            margin: 20px 0;
             text-align: center;
         }
         .container {
@@ -38,9 +38,9 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             padding: 20px;
             box-sizing: border-box;
-            width: auto; /* Ajusta al tamaño del contenido */
+            width: auto;
             max-width: 80%;
-            min-width: 300px; /* Evita que el marco sea demasiado pequeño */
+            min-width: 300px;
         }
         .text {
             font-family: 'Courier Prime', monospace;
@@ -49,13 +49,13 @@
             color: #2a2a2a; /* Color oscuro más visible */
             line-height: 1.6;
             padding: 20px;
-            white-space: pre-wrap; /* Respetar saltos de línea */
+            white-space: pre-wrap;
             word-wrap: break-word;
-            text-align: left; /* Alineación izquierda */
+            text-align: left;
         }
         button {
             padding: 10px 20px;
-            background-color: #800080; /* Morado */
+            background-color: #800080;
             color: white;
             border: none;
             border-radius: 5px;
@@ -69,27 +69,44 @@
         /* Estilo para la lista de archivos */
         #fileListContainer {
             position: relative;
-            background-image: url('papel.jpg'); /* Fondo de papel */
+            background-image: url('papel.jpg');
             background-size: cover;
             background-position: center;
-            border: 1px solid #d4af37; /* Borde dorado suave */
+            border: 1px solid #d4af37;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             padding: 20px;
             box-sizing: border-box;
             margin-top: 30px;
-            width: auto;
-            max-width: 80%;
+            width: 45%;
         }
 
         #fileList {
             margin-top: 20px;
             list-style-type: none;
             padding: 0;
-            color: #ffffff; /* Texto blanco */
+            color: #ffffff;
         }
 
         #fileList li {
             margin: 10px 0;
+        }
+
+        /* Contenedor para mostrar el archivo seleccionado */
+        #fileContentContainer {
+            position: relative;
+            background-image: url('papel.jpg');
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #d4af37;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            box-sizing: border-box;
+            margin-top: 30px;
+            width: 45%;
+            min-height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         /* Ajustes para pantallas pequeñas */
@@ -100,6 +117,9 @@
             .text {
                 font-size: 1em;
             }
+            #fileListContainer, #fileContentContainer {
+                width: 90%; /* Más ancho en pantallas pequeñas */
+            }
         }
 
         /* Ajustes para pantallas móviles */
@@ -109,7 +129,7 @@
                 margin: 10px 0;
             }
             .container {
-                max-width: 90%; /* Más ancho en pantallas pequeñas */
+                max-width: 90%;
             }
             .text {
                 font-size: 0.9em;
@@ -129,11 +149,15 @@
         <ul id="fileList"></ul>
     </div>
 
+    <div id="fileContentContainer">
+        <div id="fileContent" class="text">Selecciona un archivo para ver su contenido.</div>
+    </div>
+
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
         const supabaseUrl = 'https://evajsorhnvuhmqznsxyb.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2YWpzb3JobnZ1aG1xem5zeHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxOTk3MzUsImV4cCI6MjA1MTc3NTczNX0.6rpRY5LnVI1drZvm2avoQmMoP8mVRFXSQSFSkEe4xt0'; // Reemplaza con tu clave API
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2YWpzb3JobnZ1aG1xem5zeHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxOTk3MzUsImV4cCI6MjA1MTc3NTczNX0.6rpRY5LnVI1drZvm2avoQmMoP8mVRFXSQSFSkEe4xt0';
         const supabase = createClient(supabaseUrl, supabaseKey);
 
         // Función para subir un archivo de texto
@@ -195,13 +219,22 @@
                 // Crear un enlace para el archivo
                 const li = document.createElement('li');
                 const link = document.createElement('a');
-                link.href = publicUrl.publicUrl;
+                link.href = '#';
                 link.textContent = fileName;
+                link.onclick = () => showFileContent(publicUrl.publicUrl);
                 link.target = '_blank';
 
                 li.appendChild(link);
                 fileList.appendChild(li);
             });
+        }
+
+        // Función para mostrar el contenido del archivo al hacer clic
+        async function showFileContent(fileUrl) {
+            const response = await fetch(fileUrl);
+            const text = await response.text();
+            const fileContent = document.getElementById('fileContent');
+            fileContent.textContent = text;
         }
 
         // Llamar a la función para cargar los archivos al iniciar la página
