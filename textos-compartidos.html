@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Textos</title>
+</head>
+<body>
+    <h1>Lista de Archivos</h1>
+    <ul id="fileList"></ul>
+
+    <script>
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+        const supabaseUrl = 'https://evajsorhnvuhmqznsxyb.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2YWpzb3JobnZ1aG1xem5zeHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxOTk3MzUsImV4cCI6MjA1MTc3NTczNX0.6rpRY5LnVI1drZvm2avoQmMoP8mVRFXSQSFSkEe4xt0'; // Reemplaza con tu clave API
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        async function fetchFiles() {
+            // Cambia 'nombre-del-bucket' por el nombre real de tu bucket
+            const bucketName = 'textos';
+            const folderPath = ''; // Opcional: especifica un subdirectorio si lo necesitas
+
+            const { data: files, error } = await supabase
+                .storage
+                .from(bucketName)
+                .list(folderPath);
+
+            if (error) {
+                console.error('Error al listar archivos:', error.message);
+                return;
+            }
+
+            const fileList = document.getElementById('fileList');
+            files.forEach(file => {
+                const fileName = file.name;
+
+                // Obtener URL pública para cada archivo
+                const { data: publicUrl } = supabase
+                    .storage
+                    .from(bucketName)
+                    .getPublicUrl(fileName);
+
+                // Crear un enlace para el archivo
+                const li = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = publicUrl.publicUrl;
+                link.textContent = fileName;
+                link.target = '_blank';
+
+                li.appendChild(link);
+                fileList.appendChild(li);
+            });
+        }
+
+        // Llamar a la función para cargar los archivos al iniciar la página
+        fetchFiles();
+    </script>
+</body>
+</html>
