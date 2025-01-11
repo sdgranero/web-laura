@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Manque</title>
+    <!-- Fuente estilo telegrama -->
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+    <!-- Incluir jQuery (opcional) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-image: url('fondo_madera.jpg'); /* Fondo de madera */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column; /* Asegura que el título esté arriba del marco */
+        }
+        h1 {
+            color: #ffffff; /* Título en blanco */
+            font-family: 'Courier Prime', monospace;
+            font-size: 2em;
+            margin: 20px 0; /* Espaciado del título */
+            text-align: center;
+        }
+        .container {
+            position: relative;
+            background-image: url('papel.jpg'); /* Fondo de papel */
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #d4af37; /* Borde dorado suave */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            box-sizing: border-box;
+            width: auto; /* Ajusta al tamaño del contenido */
+            max-width: 80%;
+            min-width: 300px; /* Evita que el marco sea demasiado pequeño */
+        }
+        .text {
+            font-family: 'Courier Prime', monospace;
+            font-size: 1.2em;
+            font-weight: bold; /* Negrita para mayor contraste */
+            color: #2a2a2a; /* Color oscuro más visible */
+            line-height: 1.6;
+            padding: 20px;
+            white-space: pre-wrap; /* Respetar saltos de línea */
+            word-wrap: break-word;
+            text-align: left; /* Alineación izquierda */
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #800080; /* Morado */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        button:hover {
+            background-color: #660066;
+        }
+
+        /* Ajustes para pantallas pequeñas */
+        @media screen and (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            .text {
+                font-size: 1em;
+            }
+        }
+
+        /* Ajustes para pantallas móviles */
+        @media screen and (max-width: 480px) {
+            h1 {
+                font-size: 1.5em;
+                margin: 10px 0;
+            }
+            .container {
+                max-width: 90%; /* Más ancho en pantallas pequeñas */
+            }
+            .text {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Le manque</h1>
+    <div class="container">
+        <textarea class="text" id="editor" rows="10" placeholder="Escribe aquí..."></textarea>
+        <button id="submitBtn">Enviar</button>
+    </div>
+    <script>
+        const supabase = createClient("https://evajsorhnvuhmqznsxyb.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2YWpzb3JobnZ1aG1xem5zeHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxOTk3MzUsImV4cCI6MjA1MTc3NTczNX0.6rpRY5LnVI1drZvm2avoQmMoP8mVRFXSQSFSkEe4xt0"); // Reemplaza con tu configuración
+
+        document.getElementById('submitBtn').addEventListener('click', async () => {
+            const textContent = document.getElementById('editor').value;
+
+            if (!textContent.trim()) {
+                alert('El texto está vacío. Por favor, escribe algo antes de enviarlo.');
+                return;
+            }
+
+            const fileName = `texto_${Date.now()}.txt`;
+            const blob = new Blob([textContent], { type: 'text/plain' });
+
+            const { data, error } = await supabase
+                .storage
+                .from('textos')
+                .upload(fileName, blob, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
+
+            if (error) {
+                console.error('Error al subir el archivo:', error.message);
+                alert('Hubo un problema al subir el texto. Por favor, inténtalo de nuevo.');
+            } else {
+                console.log('Archivo subido correctamente:', data);
+                alert('Texto enviado correctamente.');
+                document.getElementById('editor').value = ''; // Limpia el editor
+            }
+        });
+    </script>
+</body>
+</html>
