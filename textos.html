@@ -256,7 +256,6 @@
                 const response = await fetch(fileUrl);
                 const text = await response.text();
                 const fileContent = document.getElementById('fileContent');
-                const fileTitle = document.getElementById('fileTitle');
                 fileContent.textContent = text;
                 fileTitle.textContent = fileName;
             } catch (error) {
