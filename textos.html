@@ -53,6 +53,7 @@
         .enviar {
             position: relative;
             background-size: cover;
+            background-image: url('papel.jpg'); /* Fondo de papel */
             background-position: center;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             padding: 20px;
@@ -191,7 +192,7 @@
                 return;
             }
 
-            const fileName = `texto_${formatDate()}.txt`;
+            const fileName = `${formatDate()}`;
             const blob = new Blob([textContent], { type: 'text/plain' });
 
             const { data, error } = await supabase
