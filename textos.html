@@ -42,6 +42,7 @@
             border: 1px solid #d4af37; /* Borde dorado suave */
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             padding: 50px;
+            text-align: center;
             box-sizing: border-box;
             flex: 1;
             min-width: 300px;
@@ -56,7 +57,7 @@
             font-weight: bold; /* Negrita para mayor contraste */
             color: #2a2a2a; /* Color oscuro más visible */
             line-height: 1.6;
-            padding-left: 50px;
+            padding: 20px;
             text-align: center;
             white-space: pre-wrap;
             word-wrap: break-word;
@@ -155,16 +156,15 @@
     </style>
 </head>
 <body>
-    <h1>Mensajes</h1>
+
     <div class="triptico">
         <div class="container">
             <textarea class="text" id="editor" rows="10" placeholder="Escribe aquí..."></textarea>
             <button id="submitBtn">Enviar</button>
         </div>
         
-
+        <h1>Mensajes</h1>
         <div id="fileListContainer" class="container">
-            <h2>Lista de Archivos</h2>
             <ul id="fileList"></ul>
         </div>
 
