@@ -3,139 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>---Mensajes---</title>
+    <title>Mensajes</title>
     <!-- Fuente estilo telegrama -->
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
-    <!-- Incluir jQuery (opcional) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            background-color: #333333; /* Fondo gris oscuro */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        h1 {
-            color: #ffffff; /* Título en blanco */
-            font-family: 'Courier Prime', monospace;
-            font-size: 2.5em;
-            margin: 20px 0;
-            text-align: center;
-        }
-        .triptico {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            width: 100%;
-            max-width: 1200px;
-            padding: 20px;
-        }
-        .container {
-            position: relative;
-            background-image: url('papel.jpg'); /* Fondo de papel */
-            background-size: cover;
-            background-position: center;
-            border: 1px solid #d4af37; /* Borde dorado suave */
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            box-sizing: border-box;
-            flex: 1;
-            min-width: 300px;
-        }
-        .text {
-            font-family: 'Courier Prime', monospace;
-            font-size: 1.2em;
-            font-weight: bold; /* Negrita para mayor contraste */
-            color: #2a2a2a; /* Color oscuro más visible */
-            line-height: 1.6;
-            padding: 20px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            text-align: left;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #800080;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-        button:hover {
-            background-color: #660066;
-        }
-
-        /* Estilo para la lista de archivos */
-        #fileListContainer {
-            position: relative;
-            background-image: url('papel.jpg');
-            background-size: cover;
-            background-position: center;
-            border: 1px solid #d4af37;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        #fileList {
-            margin-top: 20px;
-            list-style-type: none;
-            padding: 0;
-            color: #ffffff;
-        }
-
-        #fileList li {
-            margin: 10px 0;
-        }
-
-        /* Contenedor para mostrar el archivo seleccionado */
-        #fileContentContainer {
-            position: relative;
-            background-image: url('papel.jpg');
-            background-size: cover;
-            background-position: center;
-            border: 1px solid #d4af37;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            box-sizing: border-box;
-            min-height: 200px;
-        }
-
-        #fileContent {
-            font-weight: bold; /* Texto en negrita */
-        }
-
-        /* Ajustes para pantallas pequeñas */
-        @media screen and (max-width: 768px) {
-            h1 {
-                font-size: 1.8em;
-            }
-            .text {
-                font-size: 1em;
-            }
-            .container {
-                min-width: auto;
-            }
-        }
-
-        /* Ajustes para pantallas móviles */
-        @media screen and (max-width: 480px) {
-            h1 {
-                font-size: 1.5em;
-                margin: 10px 0;
-            }
-            .text {
-                font-size: 0.9em;
-            }
-        }
+        /* Tu CSS existente aquí */
     </style>
 </head>
 <body>
@@ -188,7 +62,6 @@
                 console.error('Error al subir el archivo:', error.message);
                 alert('Hubo un problema al subir el texto. Por favor, inténtalo de nuevo.');
             } else {
-                console.log('Archivo subido correctamente:', data);
                 alert('Texto enviado correctamente.');
                 document.getElementById('editor').value = ''; // Limpia el editor
                 fetchFiles(); // Refresca la lista de archivos después de subir uno nuevo
@@ -214,19 +87,19 @@
             files.forEach(file => {
                 const fileName = file.name;
 
-                // Obtener URL pública para cada archivo
                 const { data: publicUrl } = supabase
                     .storage
                     .from(bucketName)
                     .getPublicUrl(fileName);
 
-                // Crear un enlace para el archivo
                 const li = document.createElement('li');
                 const link = document.createElement('a');
                 link.href = '#';
                 link.textContent = fileName;
-                link.onclick = () => showFileContent(publicUrl.publicUrl, fileName);
-                link.target = '_blank';
+                link.addEventListener('click', (event) => {
+                    event.preventDefault(); // Detener el comportamiento predeterminado
+                    showFileContent(publicUrl.publicUrl, fileName);
+                });
 
                 li.appendChild(link);
                 fileList.appendChild(li);
@@ -235,12 +108,16 @@
 
         // Función para mostrar el contenido del archivo al hacer clic
         async function showFileContent(fileUrl, fileName) {
-            const response = await fetch(fileUrl);
-            const text = await response.text();
-            const fileContent = document.getElementById('fileContent');
-            const fileTitle = document.getElementById('fileTitle');
-            fileContent.textContent = text;
-            fileTitle.textContent = fileName; // Cambiar el título del tercer marco al nombre del archivo
+            try {
+                const response = await fetch(fileUrl);
+                const text = await response.text();
+                const fileContent = document.getElementById('fileContent');
+                const fileTitle = document.getElementById('fileTitle');
+                fileContent.textContent = text;
+                fileTitle.textContent = fileName;
+            } catch (error) {
+                console.error('Error al cargar el contenido del archivo:', error.message);
+            }
         }
 
         // Llamar a la función para cargar los archivos al iniciar la página
