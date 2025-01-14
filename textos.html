@@ -45,11 +45,23 @@
             background-position: center;
             border: 1px solid #d4af37; /* Borde dorado suave */
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            padding: 20px;
+            padding: 50px;
             box-sizing: border-box;
             flex: 1;
             min-width: 300px;
         }
+        .boton {
+            position: relative;
+            background-image: url('papel.jpg'); /* Fondo de papel */
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #d4af37; /* Borde dorado suave */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            padding: 50px;
+            box-sizing: border-box;
+            flex: 1;
+            min-width: 300px;
+        }        
         .text {
             font-family: 'Courier Prime', monospace;
             font-size: 1.2em;
@@ -147,6 +159,9 @@
     <div class="triptico">
         <div class="container">
             <textarea class="text" id="editor" rows="10" placeholder="Escribe aquí..."></textarea>
+            <button id="submitBtn">Enviar</button>
+        </div>
+        <div class="enviar">
             <button id="submitBtn">Enviar</button>
         </div>
 
