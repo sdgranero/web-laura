@@ -8,11 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-   <!-- Fuente estilo telegrama -->
-    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
-    <!-- Incluir jQuery (opcional) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <style>
         body {
             margin: 0;
@@ -37,6 +32,7 @@
             width: 100%;
             max-width: 1200px;
             padding: 20px;
+            flex-direction: row; /* Disposición en fila por defecto */
         }
         .container {
             position: relative;
@@ -121,6 +117,11 @@
             font-weight: bold; /* Texto en negrita */
         }
 
+        /* Estilo para los títulos de los contenedores */
+        h2 {
+            color: #333333; /* Título en gris oscuro */
+        }
+
         /* Ajustes para pantallas pequeñas */
         @media screen and (max-width: 768px) {
             h1 {
@@ -132,6 +133,10 @@
             .container {
                 min-width: auto;
             }
+            .triptico {
+                flex-direction: column; /* Cambiar a columna en pantallas pequeñas */
+                gap: 10px; /* Reducir espacio entre los contenedores */
+            }
         }
 
         /* Ajustes para pantallas móviles */
@@ -142,6 +147,9 @@
             }
             .text {
                 font-size: 0.9em;
+            }
+            .container {
+                padding: 20px;
             }
         }
     </style>
@@ -156,13 +164,13 @@
         
 
         <div id="fileListContainer" class="container">
-            <h2 style="color: #ffffff;">Lista de Archivos</h2>
+            <h2>Lista de Archivos</h2>
             <ul id="fileList"></ul>
         </div>
 
         <div id="fileContentContainer" class="container">
-            <h2 id="fileTitle" style="color: #ffffff;">Selecciona un archivo para ver su contenido.</h2>
-            <div id="fileContent" class="text">Selecciona un archivo para ver su contenido.</div>
+            <h2 id="fileTitle">Selecciona un archivo para ver su contenido.</h2>
+            <div id="fileContent" class="text" style="text-align: center;">Selecciona un archivo para ver su contenido.</div>
         </div>
     </div>
 
