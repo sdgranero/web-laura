@@ -191,7 +191,7 @@
                 return;
             }
 
-            const fileName = `texto_${Date.now()}.txt`;
+            const fileName = `texto_${formatDate()}.txt`;
             const blob = new Blob([textContent], { type: 'text/plain' });
 
             const { data, error } = await supabase
@@ -263,7 +263,18 @@
                 console.error('Error al cargar el contenido del archivo:', error.message);
             }
         }
-
+        function formatDate() {
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0'); // Día con dos dígitos
+            const month = String(now.getMonth() + 1).padStart(2, '0'); // Mes con dos dígitos
+            const year = now.getFullYear(); // Año completo
+            const hours = String(now.getHours()).padStart(2, '0'); // Horas con dos dígitos
+            const minutes = String(now.getMinutes()).padStart(2, '0'); // Minutos con dos dígitos
+            const seconds = String(now.getSeconds()).padStart(2, '0'); // Segundos con dos dígitos
+        
+            return `${day}_${month}_${year}_${hours}:${minutes}:${seconds}`;
+        }
+        
         // Llamar a la función para cargar los archivos al iniciar la página
         fetchFiles();
     </script>
