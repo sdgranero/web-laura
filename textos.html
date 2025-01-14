@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Le Manque</title>
+    <!-- Fuente estilo telegrama -->
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+    <!-- Incluir jQuery (opcional) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <style>
@@ -12,52 +14,51 @@
             margin: 0;
             padding: 0;
             height: 100vh;
-            background-image: url('fondo_madera.jpg');
-            background-size: cover;
-            background-position: center;
+            background-color: #333333; /* Fondo gris oscuro */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #ffffff; /* Título en blanco */
+            font-family: 'Courier Prime', monospace;
+            font-size: 2.5em;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .triptico {
             display: flex;
             justify-content: center;
-            align-items: center;
-            font-family: 'Courier Prime', monospace;
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
         }
         .container {
-            display: flex;
-            justify-content: space-between;
-            width: 90%;
-            max-width: 1200px;
-        }
-        .section {
-            background-image: url('papel.jpg');
+            position: relative;
+            background-image: url('papel.jpg'); /* Fondo de papel */
             background-size: cover;
             background-position: center;
-            border: 1px solid #d4af37;
+            border: 1px solid #d4af37; /* Borde dorado suave */
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             padding: 20px;
             box-sizing: border-box;
-            width: 30%;
-            min-height: 300px;
-        }
-        .section h2 {
-            color: #ffffff;
-            text-align: center;
+            flex: 1;
+            min-width: 300px;
         }
         .text {
+            font-family: 'Courier Prime', monospace;
             font-size: 1.2em;
-            font-weight: bold;
-            color: #2a2a2a;
+            font-weight: bold; /* Negrita para mayor contraste */
+            color: #2a2a2a; /* Color oscuro más visible */
             line-height: 1.6;
-            padding: 10px;
+            padding: 20px;
             white-space: pre-wrap;
             word-wrap: break-word;
             text-align: left;
-        }
-        textarea {
-            width: 100%;
-            height: 150px;
-            resize: none;
-            font-family: 'Courier Prime', monospace;
-            font-size: 1em;
-            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         button {
             padding: 10px 20px;
@@ -67,57 +68,92 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 1em;
-            display: block;
-            margin: 10px auto 0;
         }
         button:hover {
             background-color: #660066;
         }
+
+        /* Estilo para la lista de archivos */
+        #fileListContainer {
+            position: relative;
+            background-image: url('papel.jpg');
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #d4af37;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
         #fileList {
+            margin-top: 20px;
             list-style-type: none;
             padding: 0;
             color: #ffffff;
         }
+
         #fileList li {
             margin: 10px 0;
         }
-        #fileContent {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+
+        /* Contenedor para mostrar el archivo seleccionado */
+        #fileContentContainer {
+            position: relative;
+            background-image: url('papel.jpg');
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #d4af37;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            box-sizing: border-box;
             min-height: 200px;
-            color: #2a2a2a;
         }
+
+        #fileContent {
+            font-weight: bold; /* Texto en negrita */
+        }
+
+        /* Ajustes para pantallas pequeñas */
         @media screen and (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                align-items: center;
+            h1 {
+                font-size: 1.8em;
             }
-            .section {
-                width: 90%;
-                margin-bottom: 20px;
+            .text {
+                font-size: 1em;
+            }
+            .container {
+                min-width: auto;
+            }
+        }
+
+        /* Ajustes para pantallas móviles */
+        @media screen and (max-width: 480px) {
+            h1 {
+                font-size: 1.5em;
+                margin: 10px 0;
+            }
+            .text {
+                font-size: 0.9em;
             }
         }
     </style>
 </head>
 <body>
-    <h1 style="text-align: center; color: #ffffff;">Le manque</h1>
-    <div class="container">
-        <!-- Sección 1: Introducir texto -->
-        <div class="section">
-            <h2>Escribir texto</h2>
-            <textarea id="editor" placeholder="Escribe aquí..."></textarea>
+    <h1>Le manque</h1>
+    <div class="triptico">
+        <div class="container">
+            <textarea class="text" id="editor" rows="10" placeholder="Escribe aquí..."></textarea>
             <button id="submitBtn">Enviar</button>
         </div>
-        <!-- Sección 2: Lista de textos -->
-        <div class="section">
-            <h2>Lista de Archivos</h2>
+
+        <div id="fileListContainer" class="container">
+            <h2 style="color: #ffffff;">Lista de Archivos</h2>
             <ul id="fileList"></ul>
         </div>
-        <!-- Sección 3: Mostrar contenido -->
-        <div class="section">
-            <h2>Contenido del Archivo</h2>
-            <div id="fileContent">Selecciona un archivo para ver su contenido.</div>
+
+        <div id="fileContentContainer" class="container">
+            <h2 id="fileTitle" style="color: #ffffff;">Selecciona un archivo para ver su contenido.</h2>
+            <div id="fileContent" class="text">Selecciona un archivo para ver su contenido.</div>
         </div>
     </div>
 
@@ -128,6 +164,7 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2YWpzb3JobnZ1aG1xem5zeHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYxOTk3MzUsImV4cCI6MjA1MTc3NTczNX0.6rpRY5LnVI1drZvm2avoQmMoP8mVRFXSQSFSkEe4xt0';
         const supabase = createClient(supabaseUrl, supabaseKey);
 
+        // Función para subir un archivo de texto
         document.getElementById('submitBtn').addEventListener('click', async () => {
             const textContent = document.getElementById('editor').value;
 
@@ -153,11 +190,12 @@
             } else {
                 console.log('Archivo subido correctamente:', data);
                 alert('Texto enviado correctamente.');
-                document.getElementById('editor').value = '';
-                fetchFiles();
+                document.getElementById('editor').value = ''; // Limpia el editor
+                fetchFiles(); // Refresca la lista de archivos después de subir uno nuevo
             }
         });
 
+        // Función para obtener y mostrar los archivos del bucket
         async function fetchFiles() {
             const bucketName = 'textos';
             const { data: files, error } = await supabase
@@ -171,40 +209,41 @@
             }
 
             const fileList = document.getElementById('fileList');
-            fileList.innerHTML = '';
+            fileList.innerHTML = ''; // Limpiar la lista antes de agregar los nuevos elementos
 
             files.forEach(file => {
                 const fileName = file.name;
 
+                // Obtener URL pública para cada archivo
                 const { data: publicUrl } = supabase
                     .storage
                     .from(bucketName)
                     .getPublicUrl(fileName);
 
+                // Crear un enlace para el archivo
                 const li = document.createElement('li');
                 const link = document.createElement('a');
                 link.href = '#';
                 link.textContent = fileName;
-                link.onclick = () => showFileContent(publicUrl.publicUrl);
+                link.onclick = () => showFileContent(publicUrl.publicUrl, fileName);
+                link.target = '_blank';
 
                 li.appendChild(link);
                 fileList.appendChild(li);
             });
         }
 
-        async function showFileContent(fileUrl) {
-            try {
-                const response = await fetch(fileUrl);
-                if (!response.ok) throw new Error('Error al obtener el archivo.');
-                const text = await response.text();
-                const fileContent = document.getElementById('fileContent');
-                fileContent.textContent = text;
-            } catch (error) {
-                console.error('Error al mostrar el contenido del archivo:', error);
-                alert('Hubo un problema al cargar el archivo.');
-            }
+        // Función para mostrar el contenido del archivo al hacer clic
+        async function showFileContent(fileUrl, fileName) {
+            const response = await fetch(fileUrl);
+            const text = await response.text();
+            const fileContent = document.getElementById('fileContent');
+            const fileTitle = document.getElementById('fileTitle');
+            fileContent.textContent = text;
+            fileTitle.textContent = fileName; // Cambiar el título del tercer marco al nombre del archivo
         }
 
+        // Llamar a la función para cargar los archivos al iniciar la página
         fetchFiles();
     </script>
 </body>
